@@ -356,12 +356,14 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
 
   /* player */
   const dlg=$('player'),stage=$('stage'),takes=$('takes');let cur=0;
-  function show(p,j){stage.innerHTML='';
-    if(p.takes){const t=p.takes[j];const v=document.createElement('video');v.controls=true;v.playsInline=true;v.autoplay=true;v.poster='../'+t[2];v.src='../'+t[1];stage.appendChild(v);return}
-    if(canEmbed){const f=document.createElement('iframe');f.src=embed(p.v[j]);f.allow='autoplay; fullscreen';f.allowFullscreen=true;f.title=p.t;stage.appendChild(f);return}
+  // each project: its own uploaded films first, then its Behance videos
+  const itemsOf=p=>[...(p.takes||[]).map(t=>({kind:'file',label:t[0],src:'../'+t[1],poster:'../'+t[2]})),...(p.v||[]).map((id,j)=>({kind:'bh',label:'Behance '+(j+1),id}))];
+  function show(p,j){stage.innerHTML='';const it=itemsOf(p)[j];
+    if(it.kind==='file'){const v=document.createElement('video');v.controls=true;v.playsInline=true;v.autoplay=true;v.poster=it.poster;v.src=it.src;stage.appendChild(v);return}
+    if(canEmbed){const f=document.createElement('iframe');f.src=embed(it.id);f.allow='autoplay; fullscreen';f.allowFullscreen=true;f.title=p.t;stage.appendChild(f);return}
     stage.innerHTML=`<img src="${p.src}" alt="">`}
   function open(i){cur=i;const p=P[i];$('pT').textContent=p.t;$('pD').textContent=p.d;$('pBh').href=BH+p.url;
-    const list=p.takes?p.takes.map(t=>t[0]):p.v.map((_,j)=>'Video '+(j+1));takes.innerHTML='';
+    const list=itemsOf(p).map((it,j)=>it.kind==='file'?it.label:'Video '+(j+1));takes.innerHTML='';
     if(list.length>1)list.forEach((l,j)=>{const b=document.createElement('button');b.type='button';b.textContent=l;b.setAttribute('aria-pressed',j===0);b.addEventListener('click',()=>{takes.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));show(p,j)});takes.appendChild(b)});
     show(p,0);if(!dlg.open)dlg.showModal()}
   $('pClose').addEventListener('click',()=>dlg.close());
