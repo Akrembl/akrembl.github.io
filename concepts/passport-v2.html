@@ -107,13 +107,7 @@ section{padding-block:clamp(52px,7vw,90px)}
 .ic-play::before{left:3px}.ic-play::after{right:3px}
 .paused .ic-play::before{left:4px;width:0;height:0;top:1px;bottom:auto;border-radius:0;background:none;border-style:solid;border-width:7px 0 7px 11px;border-color:transparent transparent transparent currentColor}
 .paused .ic-play::after{opacity:0}
-.ic-snd{display:flex;align-items:center;justify-content:center;gap:3px}
-.ic-snd i{width:2px;height:14px;border-radius:2px;background:currentColor;transform-origin:center;animation:eq 1s ease-in-out infinite}
-.ic-snd i:nth-child(1){height:8px}.ic-snd i:nth-child(2){height:14px;animation-delay:-.35s}.ic-snd i:nth-child(3){height:10px;animation-delay:-.7s}
-.f-ctrl.is-paused .ic-snd i{animation-play-state:paused}
-@keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
-.muted .ic-snd i{animation:none;transform:scaleY(.15)}
-@media (prefers-reduced-motion:reduce){.ic-snd i{animation:none;transform:scaleY(.7)}}
+.ic-spk .x{display:none}.muted .ic-spk .w{display:none}.muted .ic-spk .x{display:inline}
 .f-info{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 28px;align-items:end;padding:clamp(18px,3vw,30px)}
 @media (max-width:760px){.f-info{grid-template-columns:1fr}}
 .f-info h3{margin:6px 0 8px;font:900 clamp(30px,4vw,48px)/1 var(--serif)}
@@ -281,7 +275,7 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
           <video id="fVid" muted playsinline loop preload="metadata" poster="../assets/still-LANKA2.jpg" src="../assets/film-LANKA2.mp4"></video>
           <span class="f-tag"><i aria-hidden="true"></i>Featured film</span>
           <div class="f-ctrl">
-            <div class="vol"><button type="button" id="fSound" class="muted" aria-label="Turn sound on"><span class="ic ic-snd" aria-hidden="true"><i></i><i></i><i></i></span></button><input type="range" id="fVol" min="0" max="1" step="0.05" value="0.8" aria-label="Volume"></div>
+            <div class="vol"><button type="button" id="fSound" class="muted" aria-label="Turn sound on"><svg class="ic-spk" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" stroke="none"/><g class="w"><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="x"><path d="M16 9.5l5 5M21 9.5l-5 5"/></g></svg></button><input type="range" id="fVol" min="0" max="1" step="0.05" value="0.8" aria-label="Volume"></div>
             <button type="button" id="fPlay" aria-label="Pause"><span class="ic ic-play" aria-hidden="true"></span></button>
           </div>
         </div>
@@ -412,7 +406,7 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
   /* hero window reel */
   const reel=$('reel'),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   // montage of 2-second shots from the Sri Lanka clips, looping
-  reel.src="../assets/window-montage.mp4?v=2";reel.loop=true;
+  reel.src="../assets/window-montage.mp4?v=3";reel.loop=true;
   if(!reduce)reel.play().catch(()=>{});
 
   /* featured film: plays by itself when scrolled into view */
