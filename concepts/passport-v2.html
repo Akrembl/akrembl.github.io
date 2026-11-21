@@ -257,7 +257,6 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
             <h3>Sri Lanka Surf Trip</h3>
             <p>Surfers, fishermen up before the sun, harbour boats and street life between sessions on Sri Lanka's south coast. Shot handheld and finished with a soft filmic grade.</p>
           </div>
-          <a class="btn" href="https://www.behance.net/gallery/258567637/Sri-Lanka-surf-trip" target="_blank" rel="noopener" style="background:transparent;color:#f3f1ea;border-color:#f3f1ea">Open on Behance ↗</a>
         </div>
       </article>
       <h3 class="more">More work</h3>
@@ -328,7 +327,6 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
       <p id="pD"></p>
       <div class="m-f">
         <div class="nav2"><button class="btn" type="button" id="pPrev">← Previous</button><button class="btn" type="button" id="pNext">Next →</button></div>
-        <a class="btn" id="pBh" href="#" target="_blank" rel="noopener">Open on Behance ↗</a>
       </div>
     </div>
   </div>
@@ -362,7 +360,7 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
     if(it.kind==='file'){const v=document.createElement('video');v.controls=true;v.playsInline=true;v.autoplay=true;v.poster=it.poster;v.src=it.src;stage.appendChild(v);return}
     if(canEmbed){const f=document.createElement('iframe');f.src=embed(it.id);f.allow='autoplay; fullscreen';f.allowFullscreen=true;f.title=p.t;stage.appendChild(f);return}
     stage.innerHTML=`<img src="${p.src}" alt="">`}
-  function open(i){cur=i;const p=P[i];$('pT').textContent=p.t;$('pD').textContent=p.d;$('pBh').href=BH+p.url;
+  function open(i){cur=i;const p=P[i];$('pT').textContent=p.t;$('pD').textContent=p.d;
     const list=itemsOf(p).map((it,j)=>it.kind==='file'?it.label:'Video '+(j+1));takes.innerHTML='';
     if(list.length>1)list.forEach((l,j)=>{const b=document.createElement('button');b.type='button';b.textContent=l;b.setAttribute('aria-pressed',j===0);b.addEventListener('click',()=>{takes.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));show(p,j)});takes.appendChild(b)});
     show(p,0);if(!dlg.open)dlg.showModal()}
