@@ -106,9 +106,18 @@ section{padding-block:clamp(52px,7vw,90px)}
 .f-info h3{margin:6px 0 8px;font:900 clamp(30px,4vw,48px)/1 var(--serif)}
 .f-info p{margin:0;color:#c9cfdb;max-width:60ch}
 .f-info .mono{color:#9aa6bd}
-.f-takes{display:flex;gap:8px;flex-wrap:wrap;grid-column:1/-1}
-.f-takes button{min-height:38px;padding:0 14px;border-radius:999px;border:1.5px solid #3a4560;background:transparent;color:#f3f1ea;font:500 14px var(--sans);cursor:pointer}
-.f-takes button[aria-pressed="true"]{background:#f3f1ea;color:var(--navy);border-color:#f3f1ea}
+.f-stage img.f-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.vol{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 14px 0 6px;border-radius:999px;background:rgba(251,250,246,.92);color:var(--navy)}
+.vol button{min-height:34px;width:34px;padding:0;justify-content:center;background:none!important;font-size:16px}
+.vol input{width:110px;accent-color:var(--navy);cursor:pointer}
+@media (max-width:520px){.vol input{width:70px}.f-ctrl{left:16px;right:16px;justify-content:flex-end;flex-wrap:wrap}}
+.thumbs{display:flex;gap:10px;overflow-x:auto;padding:14px clamp(14px,2.4vw,24px) 4px;scrollbar-width:thin;scrollbar-color:#3a4560 transparent}
+.thumb-b{flex:none;width:clamp(120px,14vw,168px);padding:0;border:2px solid transparent;border-radius:10px;overflow:hidden;background:#000;cursor:pointer;position:relative;color:#fff;text-align:left}
+.thumb-b img{width:100%;aspect-ratio:16/10;object-fit:cover;opacity:.72;transition:opacity .15s}
+.thumb-b:hover img,.thumb-b[aria-pressed="true"] img{opacity:1}
+.thumb-b[aria-pressed="true"]{border-color:#f3f1ea}
+.thumb-b span{position:absolute;left:0;right:0;bottom:0;padding:16px 8px 6px;font:500 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;background:linear-gradient(transparent,rgba(0,0,0,.75))}
+.thumb-b .ty{position:absolute;top:6px;left:6px;width:22px;height:22px;border-radius:50%;background:rgba(15,21,38,.75);display:grid;place-items:center;font-size:10px}
 .more{margin:0 0 16px;font:900 clamp(24px,2.6vw,32px)/1.1 var(--serif)}
 
 /* work cards */
@@ -238,9 +247,10 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
           <span class="f-tag"><i aria-hidden="true"></i>Featured film</span>
           <div class="f-ctrl">
             <button type="button" id="fPlay" aria-label="Pause">❚❚ Pause</button>
-            <button type="button" id="fSound">🔈 Sound on</button>
+            <div class="vol"><button type="button" id="fSound" aria-label="Turn sound on">🔇</button><input type="range" id="fVol" min="0" max="1" step="0.05" value="0.8" aria-label="Volume"></div>
           </div>
         </div>
+        <div class="thumbs" id="fThumbs" role="group" aria-label="Sri Lanka clips and photos"></div>
         <div class="f-info">
           <div>
             <span class="mono">Travel film · Shot, edited &amp; graded by me</span>
@@ -248,7 +258,6 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
             <p>Surfers, fishermen up before the sun, harbour boats and street life between sessions on Sri Lanka's south coast. Shot handheld and finished with a soft filmic grade.</p>
           </div>
           <a class="btn" href="https://www.behance.net/gallery/258567637/Sri-Lanka-surf-trip" target="_blank" rel="noopener" style="background:transparent;color:#f3f1ea;border-color:#f3f1ea">Open on Behance ↗</a>
-          <div class="f-takes" id="fTakes" role="group" aria-label="Choose a clip"></div>
         </div>
       </article>
       <h3 class="more">More work</h3>
@@ -369,16 +378,26 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
   reel.addEventListener('timeupdate',()=>{if(reel.currentTime>=LOOP_START+LOOP_LEN||reel.currentTime<LOOP_START-.2)reel.currentTime=LOOP_START});
 
   /* featured film: plays by itself when scrolled into view */
-  const fv=$('fVid'),fPlay=$('fPlay'),fSound=$('fSound'),fTakes=$('fTakes'),SL=P.find(p=>p.id==='SL');
-  let userPaused=false;
+  const fv=$('fVid'),fPlay=$('fPlay'),fSound=$('fSound'),fVol=$('fVol'),thumbs=$('fThumbs'),stageEl=fv.parentElement,SL=P.find(p=>p.id==='SL');
+  let userPaused=false,photo=null;
+  fv.volume=+fVol.value;
   const setPlay=()=>{const on=!fv.paused;fPlay.textContent=on?'❚❚ Pause':'▶ Play';fPlay.setAttribute('aria-label',on?'Pause':'Play')};
-  fv.addEventListener('play',setPlay);fv.addEventListener('pause',setPlay);
-  fPlay.addEventListener('click',()=>{if(fv.paused){userPaused=false;fv.play().catch(()=>{})}else{userPaused=true;fv.pause()}});
-  fSound.addEventListener('click',()=>{fv.muted=!fv.muted;fSound.textContent=fv.muted?'🔈 Sound on':'🔇 Mute';if(fv.paused){userPaused=false;fv.play().catch(()=>{})}});
-  SL.takes.forEach((t,j)=>{const b=document.createElement('button');b.type='button';b.textContent=t[0];b.setAttribute('aria-pressed',j===0);
-    b.addEventListener('click',()=>{fTakes.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));fv.poster='../'+t[2];fv.src='../'+t[1];userPaused=false;fv.play().catch(()=>{})});fTakes.appendChild(b)});
-  if(!reduce)new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){if(!userPaused)fv.play().catch(()=>{})}else fv.pause()}),{threshold:.45}).observe(fv);
-  setPlay();
+  const setSound=()=>{const off=fv.muted||fv.volume===0;fSound.textContent=off?'🔇':(fv.volume<.5?'🔉':'🔊');fSound.setAttribute('aria-label',off?'Turn sound on':'Mute')};
+  fv.addEventListener('play',setPlay);fv.addEventListener('pause',setPlay);fv.addEventListener('volumechange',setSound);
+  fPlay.addEventListener('click',()=>{if(photo)return;if(fv.paused){userPaused=false;fv.play().catch(()=>{})}else{userPaused=true;fv.pause()}});
+  fSound.addEventListener('click',()=>{if(fv.muted||fv.volume===0){fv.muted=false;if(fv.volume===0){fv.volume=.8;fVol.value=.8}}else fv.muted=true});
+  fVol.addEventListener('input',()=>{fv.volume=+fVol.value;fv.muted=fv.volume===0});
+  function clearPhoto(){if(photo){photo.remove();photo=null}}
+  const media=[...SL.takes.map(t=>({kind:'video',label:t[0],src:'../'+t[1],poster:'../'+t[2]})),
+    ...[["dd3-8","Beach"],["d3-52","Surfer"],["d3-25","Board"],["d3-13","Fishing boat"],["d3-65","Surf shack"],["dd3-12","Island"]].map(([n,l])=>({kind:'photo',label:l,src:'../assets/photo-'+n+'.jpg',poster:'../assets/photo-'+n+'.jpg'}))];
+  media.forEach((m,j)=>{const b=document.createElement('button');b.type='button';b.className='thumb-b';b.setAttribute('aria-pressed',j===0);b.setAttribute('aria-label',(m.kind==='video'?'Play ':'View photo: ')+m.label);
+    b.innerHTML=`<img loading="lazy" src="${m.poster}" alt=""><span class="ty" aria-hidden="true">${m.kind==='video'?'▶':'◼'}</span><span>${esc(m.label)}</span>`;
+    b.addEventListener('click',()=>{thumbs.querySelectorAll('.thumb-b').forEach(x=>x.setAttribute('aria-pressed',x===b));clearPhoto();
+      if(m.kind==='video'){fv.hidden=false;fv.poster=m.poster;fv.src=m.src;userPaused=false;fv.play().catch(()=>{})}
+      else{fv.pause();photo=document.createElement('img');photo.className='f-photo';photo.src=m.src;photo.alt='Sri Lanka photo: '+m.label;stageEl.insertBefore(photo,fv.nextSibling)}});
+    thumbs.appendChild(b)});
+  if(!reduce)new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){if(!userPaused&&!photo)fv.play().catch(()=>{})}else fv.pause()}),{threshold:.45}).observe(fv);
+  setPlay();setSound();
 
   /* menu highlight */
   const links=[...document.querySelectorAll('.menu a.l')];
