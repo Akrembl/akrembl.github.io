@@ -211,13 +211,16 @@ dialog::backdrop{background:rgba(11,15,12,.86)}
   function layout(){const d=devicePixelRatio||1;W=box.clientWidth;ctx.font=`400 100px Anton`;
     const widest=Math.max(...lines.map(l=>ctx.measureText(l).width));fs=Math.floor(100*W/widest*.995);H=Math.round(fs*.86*lines.length+fs*.08);
     cv.width=W*d;cv.height=H*d;cv.style.height=H+'px';ctx.setTransform(d,0,0,d,0,0)}
-  function draw(){const img=(src.readyState>=2&&!src.paused)||src.readyState>=2?src:poster;
-    const iw=img.videoWidth||img.naturalWidth,ih=img.videoHeight||img.naturalHeight;ctx.globalCompositeOperation='source-over';ctx.clearRect(0,0,W,H);
-    ctx.fillStyle='#0b0f0c';ctx.fillRect(0,0,W,H);
+  function draw(){const img=src.readyState>=2?src:poster;
+    const iw=img.videoWidth||img.naturalWidth,ih=img.videoHeight||img.naturalHeight;
+    ctx.globalCompositeOperation='source-over';ctx.clearRect(0,0,W,H);
+    // 1) the matte: both lines of the name
+    ctx.fillStyle='#0b0f0c';ctx.font=`400 ${fs}px Anton`;ctx.textBaseline='alphabetic';
+    lines.forEach((l,i)=>ctx.fillText(l,0,fs*.8+i*fs*.86));
+    // 2) footage only where the matte is
+    ctx.globalCompositeOperation='source-atop';
     const cover=(m,mw,mh)=>{if(!mw)return;const s=Math.max(W/mw,H/mh),dw=mw*s,dh=mh*s;ctx.drawImage(m,(W-dw)/2,(H-dh)/2,dw,dh)};
     cover(poster,poster.naturalWidth,poster.naturalHeight);if(img!==poster)cover(img,iw,ih);
-    ctx.globalCompositeOperation='destination-in';ctx.fillStyle='#000';ctx.font=`400 ${fs}px Anton`;ctx.textBaseline='alphabetic';
-    lines.forEach((l,i)=>ctx.fillText(l,0,fs*.8+i*fs*.86));
     if(!reduce)requestAnimationFrame(draw)}
   document.fonts.load('400 100px Anton').then(()=>{fb.style.position='absolute';fb.style.clip='rect(0 0 0 0)';fb.style.width='1px';fb.style.height='1px';fb.style.overflow='hidden';
     cv.hidden=false;layout();
