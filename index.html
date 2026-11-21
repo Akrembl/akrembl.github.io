@@ -6,7 +6,7 @@
 <meta property="og:title" content="Akrem Ben Lagha · Filmmaker">
 <meta property="og:description" content="Filmmaker, videographer and editor based in Doha, Qatar.">
 <meta property="og:image" content="assets/still-LANKA2.jpg">
-<meta name="theme-color" content="#0d1312">
+<meta name="theme-color" content="#0b0b0d">
 <title>Akrem Ben Lagha</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Akrem Ben Lagha, filmmaker, videographer and editor based in Doha, Qatar. Travel films, brand campaigns, music videos and weddings, shot and graded end to end.">
@@ -16,13 +16,13 @@
 <style>
 /* Layout: letterboxed cinema frame up top, then a contact-sheet of work, an edit-bay "about", and a slate-style contact card. Single dark look, like a grading suite. */
 :root{
-  --ink:#0d1312;          /* sea at dusk */
-  --ink-2:#141c1a;
-  --line:#26312e;
-  --sand:#ece4d4;         /* beach sand, main text */
-  --mute:#93a09a;         /* sea-foam grey */
-  --amber:#eaa45c;        /* golden hour, used sparingly */
-  --teal:#7bb3a6;
+  --ink:#0b0b0d;          /* projection-room black */
+  --ink-2:#151518;
+  --line:#2b2b31;
+  --sand:#f3f1ec;         /* screen white, main text */
+  --mute:#9d9ca6;         /* neutral grey */
+  --amber:#4fa8dc;        /* Indian Ocean blue, used sparingly */
+  --teal:#8fd0b8;
   --display:"Big Shoulders Display","Oswald","Arial Narrow",Impact,sans-serif;
   --body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -63,7 +63,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .frame{position:relative;aspect-ratio:2.39/1;max-width:100%;background:#000;overflow:hidden;border-radius:4px}
 @media (max-width:720px){.frame{aspect-ratio:4/5}}
 .frame video,.frame img.poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,0) 40%,rgba(5,10,9,.78) 100%);pointer-events:none}
+.frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,.8) 100%);pointer-events:none}
 .hud{position:absolute;z-index:2;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(14px,2.4vw,28px)}
 .hud-top,.hud-bot{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .hud .mono{color:rgba(236,228,212,.82)}
@@ -121,10 +121,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .card:hover .thumb img{transform:scale(1.045)}
 .thumb .fallback{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:16px;background:
   radial-gradient(120% 90% at 85% 10%,color-mix(in srgb,var(--hue) 38%,transparent),transparent 60%),
-  linear-gradient(160deg,var(--ink-2),#0a0f0e)}
+  linear-gradient(160deg,var(--ink-2),#08080a)}
 .thumb .fallback b{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(30px,3.4vw,44px);line-height:.92;color:var(--sand);max-width:12ch}
 .thumb .fallback .mono{color:color-mix(in srgb,var(--hue) 70%,var(--sand))}
-.thumb .play{position:absolute;right:12px;bottom:12px;z-index:2;width:44px;height:44px;border-radius:50%;background:rgba(13,19,18,.72);backdrop-filter:blur(6px);display:grid;place-items:center;border:1px solid rgba(236,228,212,.25);transition:background .2s}
+.thumb .play{position:absolute;right:12px;bottom:12px;z-index:2;width:44px;height:44px;border-radius:50%;background:rgba(11,11,13,.72);backdrop-filter:blur(6px);display:grid;place-items:center;border:1px solid rgba(236,228,212,.25);transition:background .2s}
 .card:hover .play{background:var(--amber)}
 .card:hover .play svg{fill:var(--ink)}
 .play svg{width:14px;height:14px;fill:var(--sand);margin-left:2px}
@@ -183,7 +183,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 /* modal */
 dialog{border:0;padding:0;background:transparent;max-width:min(1100px,94vw);width:100%;color:var(--sand)}
-dialog::backdrop{background:rgba(4,7,6,.88);backdrop-filter:blur(4px)}
+dialog::backdrop{background:rgba(0,0,0,.88);backdrop-filter:blur(4px)}
 .m{background:var(--ink-2);border:1px solid var(--line);border-radius:6px;overflow:hidden;max-height:90vh;display:flex;flex-direction:column}
 .m-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
 .m-head h3{font-size:28px}
@@ -203,9 +203,9 @@ dialog::backdrop{background:rgba(4,7,6,.88);backdrop-filter:blur(4px)}
   <div class="wrap">
     <a class="brand" href="#top">Akrem<span>.</span>BL</a>
     <nav class="nav" aria-label="Main">
-      <a href="#work">Work</a>
-      <a href="#sri-lanka">Sri Lanka</a>
       <a href="#about">About</a>
+      <a href="#sri-lanka">Sri Lanka</a>
+      <a href="#work">Work</a>
       <a class="cta" href="#contact">Hire me</a>
     </nav>
   </div>
@@ -238,7 +238,49 @@ dialog::backdrop{background:rgba(4,7,6,.88);backdrop-filter:blur(4px)}
     </div>
   </section>
 
-  <section id="sri-lanka">
+  <section id="about">
+    <div class="wrap about">
+      <figure class="portrait" style="margin:0">
+        <img loading="lazy" src="assets/photo-dd3-12.jpg" alt="Surfer sitting on the beach looking out at an island, from the Sri Lanka series">
+        <figcaption>From the Sri Lanka series</figcaption>
+      </figure>
+      <div>
+        <div class="mono">About</div>
+        <h2>Camera to<br>final grade</h2>
+        <p class="lead">I'm a Tunisian filmmaker based in Doha. I've been shooting and editing professionally since 2021, and I like owning the whole film: <em>the shoot, the cut, the color and the motion</em>.</p>
+        <ul class="timeline">
+          <li>
+            <div class="when">Oct 2026 – Now</div>
+            <div><h4>Video Producer, Camera Operator &amp; Lead Editor</h4><div class="org">Lumiere Agency · Doha, Qatar</div><p>Client videos from brief to final delivery. I run camera on shoots and lead the edit, from first cut to color grade and export.</p></div>
+          </li>
+          <li>
+            <div class="when">Ongoing · Remote</div>
+            <div><h4>Freelance Wedding Film Editor</h4><div class="org">Ais Art Prod &amp; Ais Art Wedding</div><p>I edit every wedding film the studio shoots, from raw footage to final delivery.</p></div>
+          </li>
+          <li>
+            <div class="when">May 2021 – Sep 2025</div>
+            <div><h4>Videographer &amp; Video Editor</h4><div class="org">Another Vision Production · Tunisia</div><p>Four years of commercial, creative and wedding work: shooting, lighting, editing and grading, including Instagram reels for local businesses and cinematic wedding teasers.</p></div>
+          </li>
+        </ul>
+        <div class="kit">
+          <div>
+            <h5>Craft</h5>
+            <ul><li>Cinematic shooting</li><li>Storytelling</li><li>Color grading</li><li>Motion graphics</li></ul>
+          </div>
+          <div>
+            <h5>Edit bay</h5>
+            <ul><li>DaVinci Resolve <span>· main</span></li><li>Adobe Premiere Pro</li><li>Adobe After Effects</li></ul>
+          </div>
+          <div>
+            <h5>Formats &amp; languages</h5>
+            <ul><li>Long form &amp; multicam</li><li>Reels, TikTok, Shorts</li><li>Arabic · French · English</li></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sri-lanka" style="padding-top:0">
     <div class="wrap">
       <div class="sec-head">
         <div>
@@ -298,47 +340,6 @@ dialog::backdrop{background:rgba(4,7,6,.88);backdrop-filter:blur(4px)}
     </div>
   </section>
 
-  <section id="about" style="padding-top:0">
-    <div class="wrap about">
-      <figure class="portrait" style="margin:0">
-        <img loading="lazy" src="assets/photo-dd3-12.jpg" alt="Surfer sitting on the beach looking out at an island, from the Sri Lanka series">
-        <figcaption>From the Sri Lanka series</figcaption>
-      </figure>
-      <div>
-        <div class="mono">About</div>
-        <h2>Camera to<br>final grade</h2>
-        <p class="lead">I'm a Tunisian filmmaker based in Doha. I've been shooting and editing professionally since 2021, and I like owning the whole film: <em>the shoot, the cut, the color and the motion</em>.</p>
-        <ul class="timeline">
-          <li>
-            <div class="when">Oct 2026 – Now</div>
-            <div><h4>Video Producer, Camera Operator &amp; Lead Editor</h4><div class="org">Lumiere Agency · Doha, Qatar</div><p>Client videos from brief to final delivery. I run camera on shoots and lead the edit, from first cut to color grade and export.</p></div>
-          </li>
-          <li>
-            <div class="when">Ongoing · Remote</div>
-            <div><h4>Freelance Wedding Film Editor</h4><div class="org">Ais Art Prod &amp; Ais Art Wedding</div><p>I edit every wedding film the studio shoots, from raw footage to final delivery.</p></div>
-          </li>
-          <li>
-            <div class="when">May 2021 – Sep 2025</div>
-            <div><h4>Videographer &amp; Video Editor</h4><div class="org">Another Vision Production · Tunisia</div><p>Four years of commercial, creative and wedding work: shooting, lighting, editing and grading, including Instagram reels for local businesses and cinematic wedding teasers.</p></div>
-          </li>
-        </ul>
-        <div class="kit">
-          <div>
-            <h5>Craft</h5>
-            <ul><li>Cinematic shooting</li><li>Storytelling</li><li>Color grading</li><li>Motion graphics</li></ul>
-          </div>
-          <div>
-            <h5>Edit bay</h5>
-            <ul><li>DaVinci Resolve <span>· main</span></li><li>Adobe Premiere Pro</li><li>Adobe After Effects</li></ul>
-          </div>
-          <div>
-            <h5>Formats &amp; languages</h5>
-            <ul><li>Long form &amp; multicam</li><li>Reels, TikTok, Shorts</li><li>Arabic · French · English</li></ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <section id="contact" style="padding-top:0">
     <div class="wrap">
@@ -449,7 +450,7 @@ dialog::backdrop{background:rgba(4,7,6,.88);backdrop-filter:blur(4px)}
     mTitle.textContent=p.t;
     const link=`<a class="btn" href="${BH+p.url}" target="_blank" rel="noopener">View on Behance ↗</a>`;
     if(canEmbed){
-      mBody.innerHTML=`<p>${esc(p.d)}</p><div class="vids${p.vertical?' vertical':''}">${p.v.map(id=>`<iframe src="${P+id}/embed?api_key=behance1&bgcolor=%23141c1a" allow="autoplay; fullscreen" allowfullscreen loading="lazy" title="${esc(p.t)} video"></iframe>`).join('')}</div><div>${link}</div>`;
+      mBody.innerHTML=`<p>${esc(p.d)}</p><div class="vids${p.vertical?' vertical':''}">${p.v.map(id=>`<iframe src="${P+id}/embed?api_key=behance1&bgcolor=%23151518" allow="autoplay; fullscreen" allowfullscreen loading="lazy" title="${esc(p.t)} video"></iframe>`).join('')}</div><div>${link}</div>`;
     }else{
       const src=p.local?p.img:CDN+p.img;
       mBody.innerHTML=`<p>${esc(p.d)}</p><div class="out"><img src="${src}" alt="" onerror="this.remove()"><div><p style="margin-bottom:12px">${p.v.length} ${p.v.length>1?'videos':'video'} on Behance.</p>${link}</div></div>`;
