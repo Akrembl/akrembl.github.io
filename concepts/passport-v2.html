@@ -415,7 +415,7 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
   setPlay();setSound();
 
   /* trip photos + lightbox */
-  const PH=[["d3-25","Surfer carrying her board along the shore"],["d3-52","Surfer walking out of the waves"],["dd3-8","Surfer resting on the sand facing an island"],["d3-13","Woman in front of a painted fishing boat"],["d3-65","Surfer waxing her board outside a surf shack"],["dd3-12","Surfer looking out at an island"]];
+  const PH=[["dd3-12","Surfer looking out at an island"],["d3-25","Surfer carrying her board along the shore"],["d3-52","Surfer walking out of the waves"],["d3-13","Woman in front of a painted fishing boat"],["d3-65","Surfer waxing her board outside a surf shack"],["dd3-8","Surfer resting on the sand facing an island"]];
   const lb=document.createElement('dialog');lb.id='lb';lb.setAttribute('aria-label','Photo');lb.innerHTML='<img alt=""><div class="lb-bar"><button type="button" data-d="-1">← Prev</button><button type="button" data-d="0">✕ Close</button><button type="button" data-d="1">Next →</button></div>';document.body.appendChild(lb);
   let pi=0;const lbImg=lb.querySelector('img');
   const showPh=i=>{pi=(i+PH.length)%PH.length;lbImg.src='../assets/photo-'+PH[pi][0]+'.jpg';lbImg.alt=PH[pi][1]};
