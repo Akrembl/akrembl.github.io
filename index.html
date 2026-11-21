@@ -284,7 +284,7 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
       <div class="head"><h2>My work</h2><p>Starting with my favourite: the Sri Lanka surf trip.</p></div>
       <article class="feature" aria-label="Featured film: Sri Lanka surf trip">
         <div class="f-stage">
-          <video id="fVid" muted playsinline loop preload="metadata" poster="assets/still-LANKA2.jpg" src="assets/film-LANKA2.mp4"></video>
+          <video id="fVid" muted playsinline loop preload="metadata" poster="assets/still-LANKA2.jpg" data-src="assets/film-LANKA2.mp4"></video>
           <span class="f-tag"><i aria-hidden="true"></i>Featured film</span>
           <div class="f-ctrl">
             <div class="vol"><button type="button" id="fSound" class="muted" aria-label="Turn sound on"><svg class="ic-spk" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" stroke="none"/><g class="w"><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="x"><path d="M16 9.5l5 5M21 9.5l-5 5"/></g></svg></button><input type="range" id="fVol" min="0" max="1" step="0.05" value="0.8" aria-label="Volume"></div>
@@ -380,6 +380,8 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
 <script src="assets/projects.js?v=2"></script>
 <script>
 (function(){
+  const PHONE=matchMedia('(max-width:820px), (hover:none) and (pointer:coarse)').matches;
+  const vsrc=s=>PHONE&&/^assets\/[^/]+\.mp4$/.test(s)?s.replace('assets/','assets/m/'):s;
   const {P,CATS,BH,canEmbed,embed,esc}=window.AKREM;
   const COL={travel:"var(--green)",brands:"var(--blue)",music:"var(--violet)",weddings:"var(--red)",motion:"var(--amber)"};
   const $=id=>document.getElementById(id);
@@ -400,7 +402,7 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
   /* player */
   const dlg=$('player'),stage=$('stage'),takes=$('takes');let cur=0;
   // each project: its own uploaded films first, then its Behance videos
-  const itemsOf=p=>[...(p.takes||[]).map(t=>({kind:'file',label:t[0],src:t[1],poster:t[2]})),...(p.v||[]).map((id,j)=>({kind:'bh',label:'Behance '+(j+1),id}))];
+  const itemsOf=p=>[...(p.takes||[]).map(t=>({kind:'file',label:t[0],src:vsrc(t[1]),poster:t[2]})),...(p.v||[]).map((id,j)=>({kind:'bh',label:'Behance '+(j+1),id}))];
   function show(p,j){stage.innerHTML='';const it=itemsOf(p)[j];
     if(it.kind==='file'){const v=document.createElement('video');v.controls=true;v.playsInline=true;v.autoplay=true;v.poster=it.poster;v.src=it.src;stage.appendChild(v);return}
     if(canEmbed){const f=document.createElement('iframe');f.src=embed(it.id);f.allow='autoplay; fullscreen';f.allowFullscreen=true;f.title=p.t;stage.appendChild(f);return}
@@ -422,7 +424,7 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
   if(!reduce)reel.play().catch(()=>{});
 
   /* featured film: plays by itself when scrolled into view */
-  const fv=$('fVid'),fPlay=$('fPlay'),fSound=$('fSound'),fVol=$('fVol'),thumbs=$('fThumbs'),stageEl=fv.parentElement,SL=P.find(p=>p.id==='SL');
+  const fv=$('fVid'),_fs=(fv.src=vsrc(fv.dataset.src)),fPlay=$('fPlay'),fSound=$('fSound'),fVol=$('fVol'),thumbs=$('fThumbs'),stageEl=fv.parentElement,SL=P.find(p=>p.id==='SL');
   let userPaused=false,photo=null;
   fv.volume=+fVol.value;
   const setPlay=()=>{const on=!fv.paused;fPlay.classList.toggle('paused',!on);fPlay.parentElement.classList.toggle('is-paused',!on);fPlay.setAttribute('aria-label',on?'Pause':'Play')};
@@ -432,12 +434,12 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
   fSound.addEventListener('click',()=>{if(fv.muted||fv.volume===0){fv.muted=false;if(fv.volume===0){fv.volume=.8;fVol.value=.8}}else fv.muted=true});
   fVol.addEventListener('input',()=>{fv.volume=+fVol.value;fv.muted=fv.volume===0});
   function clearPhoto(){if(photo){photo.remove();photo=null}}
-  const media=SL.takes.map(t=>({kind:'video',label:t[0],src:t[1],poster:t[2]}));
+  const media=SL.takes.map(t=>({kind:'video',label:t[0],src:vsrc(t[1]),poster:t[2]}));
   media.forEach((m,j)=>{const b=document.createElement('button');b.type='button';b.className='thumb-b';b.setAttribute('aria-pressed',j===0);b.setAttribute('aria-label',(m.kind==='video'?'Play ':'View photo: ')+m.label);
     b.innerHTML=`<img loading="lazy" src="${m.poster}" alt=""><span class="ty" aria-hidden="true">${m.kind==='video'?'▶':'◼'}</span><span>${esc(m.label)}</span>`;
     b.addEventListener('click',()=>{thumbs.querySelectorAll('.thumb-b').forEach(x=>x.setAttribute('aria-pressed',x===b));clearPhoto();
       if(m.kind==='video'){if(fv.getAttribute('src')===m.src)return;fv.hidden=false;cover.src=m.poster;cover.classList.add('on');userPaused=false;
-        setTimeout(()=>{fv.poster=m.poster;fv.src=m.src;fv.play().catch(()=>{})},420)}
+        setTimeout(()=>{fv.poster=m.poster;fv.src=m.src;fv.play().catch(()=>{})},PHONE?200:380)}
       else{fv.pause();photo=document.createElement('img');photo.className='f-photo';photo.src=m.src;photo.alt='Sri Lanka photo: '+m.label;stageEl.insertBefore(photo,fv.nextSibling)}});
     thumbs.appendChild(b)});
   if(!reduce)new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){if(!userPaused&&!photo)fv.play().catch(()=>{})}else fv.pause()}),{threshold:.45}).observe(fv);
