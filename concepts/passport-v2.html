@@ -126,10 +126,17 @@ section{padding-block:clamp(52px,7vw,90px)}
 .pbtn{padding:0;border:0;border-radius:10px;overflow:hidden;cursor:zoom-in;background:#ddd;aspect-ratio:4/5;box-shadow:0 4px 14px rgba(27,39,71,.1)}
 .pbtn img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
 .pbtn:hover img{transform:scale(1.05)}
-#lb{width:auto;max-width:94vw;background:transparent}
-#lb::backdrop{background:rgba(10,14,26,.92)}
-#lb img{max-width:94vw;max-height:84vh;border-radius:8px}
-.lb-bar{display:flex;justify-content:center;gap:8px;margin-top:12px}
+#lb{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;background:transparent;overflow:hidden}
+#lb[open]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;animation:lbIn .35s ease}
+#lb::backdrop{background:rgba(10,14,26,.94)}
+@keyframes lbIn{from{opacity:0}to{opacity:1}}
+.lb-stage{position:relative;width:94vw;height:calc(100dvh - 150px);touch-action:pan-y;user-select:none}
+.lb-stage img{position:absolute;inset:0;margin:auto;max-width:100%;max-height:100%;width:auto;height:auto;border-radius:8px;box-shadow:0 24px 70px rgba(0,0,0,.55);opacity:0;transform:translateX(var(--dx,0)) scale(.96);transition:opacity .6s ease,transform .75s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.lb-stage img.on{opacity:1;transform:none}
+.lb-cap{color:#fff;font:600 14px var(--sans);opacity:.8;text-align:center;padding:0 16px}
+.lb-n{color:#fff;font:700 14px var(--sans);min-width:56px;text-align:center;align-self:center;opacity:.85}
+@media (prefers-reduced-motion:reduce){.lb-stage img{transform:none!important;transition:opacity .25s}}
+.lb-bar{display:flex;justify-content:center;gap:8px}
 .lb-bar button{min-height:42px;padding:0 16px;border-radius:999px;border:0;background:var(--card);color:var(--navy);font:700 14px var(--sans);cursor:pointer}
 .more{margin:0 0 16px;font:900 clamp(24px,2.6vw,32px)/1.1 var(--serif)}
 
@@ -298,7 +305,7 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
         </div>
         <div class="bio">
           <p>I've been shooting and editing professionally since 2021, across Tunisia and Qatar. I take a film from the camera to the final grade on my own: shooting, editing, color and motion graphics.</p>
-          <p>Travel and adventure films are the work I want to do full time, and I can join a trip at short notice.</p>
+          <p>Travel and adventure films are the work I want to do full time, and I can join a trip at short notice anywhere in Asia and Africa.</p>
           <ul class="jobs">
             <li style="--c:var(--blue)"><span class="k">Lumiere</span><div><b>Video Producer, Camera &amp; Lead Editor</b><span>Doha · Oct 2026 – now</span></div></li>
             <li style="--c:var(--violet)"><span class="k">Ais Art</span><div><b>Freelance Wedding Film Editor</b><span>Remote</span></div></li>
@@ -416,12 +423,22 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
 
   /* trip photos + lightbox */
   const PH=[["dd3-12","Surfer looking out at an island"],["d3-25","Surfer carrying her board along the shore"],["d3-52","Surfer walking out of the waves"],["d3-13","Woman in front of a painted fishing boat"],["d3-65","Surfer waxing her board outside a surf shack"],["dd3-8","Surfer resting on the sand facing an island"]];
-  const lb=document.createElement('dialog');lb.id='lb';lb.setAttribute('aria-label','Photo');lb.innerHTML='<img alt=""><div class="lb-bar"><button type="button" data-d="-1">← Prev</button><button type="button" data-d="0">✕ Close</button><button type="button" data-d="1">Next →</button></div>';document.body.appendChild(lb);
-  let pi=0;const lbImg=lb.querySelector('img');
-  const showPh=i=>{pi=(i+PH.length)%PH.length;lbImg.src='../assets/photo-'+PH[pi][0]+'.jpg';lbImg.alt=PH[pi][1]};
-  lb.querySelector('.lb-bar').addEventListener('click',e=>{const d=e.target.dataset.d;if(d===undefined)return;if(d==='0')lb.close();else showPh(pi+ +d)});
-  lb.addEventListener('click',e=>{if(e.target===lb)lb.close()});
-  lb.addEventListener('keydown',e=>{if(e.key==='ArrowRight')showPh(pi+1);if(e.key==='ArrowLeft')showPh(pi-1)});
+  const lb=document.createElement('dialog');lb.id='lb';lb.setAttribute('aria-label','Photo');lb.innerHTML='<div class="lb-stage"><img alt=""><img alt=""></div><div class="lb-cap"></div><div class="lb-bar"><button type="button" data-d="-1">← Prev</button><span class="lb-n"></span><button type="button" data-d="1">Next →</button><button type="button" data-d="0">✕ Close</button></div>';document.body.appendChild(lb);
+  let pi=0,lc=0,tok=0;const L=lb.querySelectorAll('.lb-stage img'),lbSt=lb.querySelector('.lb-stage'),cap=lb.querySelector('.lb-cap'),cnt=lb.querySelector('.lb-n');
+  const phSrc=i=>'../assets/photo-'+PH[(i+PH.length)%PH.length][0]+'.jpg';
+  const showPh=(i,dir=0)=>{pi=(i+PH.length)%PH.length;const t=++tok,out=L[lc],inn=L[lc^1];lc^=1;
+    inn.style.transition='none';inn.style.setProperty('--dx',dir*80+'px');inn.classList.remove('on');
+    out.style.setProperty('--dx',-dir*80+'px');out.classList.remove('on');
+    inn.src=phSrc(pi);inn.alt=PH[pi][1];cap.textContent=PH[pi][1];cnt.textContent=(pi+1)+' / '+PH.length;
+    const go=()=>{if(t!==tok)return;void inn.offsetWidth;inn.style.transition='';inn.classList.add('on')};
+    inn.decode?inn.decode().then(go,go):go();
+    [1,-1].forEach(k=>{new Image().src=phSrc(pi+k)})};
+  lb.querySelector('.lb-bar').addEventListener('click',e=>{const d=e.target.dataset.d;if(d===undefined)return;if(d==='0')lb.close();else showPh(pi+ +d,+d)});
+  let x0=null,moved=false;
+  lbSt.addEventListener('pointerdown',e=>{x0=e.clientX;moved=false});
+  lbSt.addEventListener('pointerup',e=>{if(x0===null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>40){moved=true;const d=dx<0?1:-1;showPh(pi+d,d)}});
+  lb.addEventListener('click',e=>{if((e.target===lb||e.target===lbSt)&&!moved)lb.close();moved=false});
+  lb.addEventListener('keydown',e=>{if(e.key==='ArrowRight')showPh(pi+1,1);if(e.key==='ArrowLeft')showPh(pi-1,-1)});
   PH.forEach(([n,alt],i)=>{const b=document.createElement('button');b.type='button';b.className='pbtn';b.setAttribute('aria-label','View photo: '+alt);
     b.innerHTML=`<img loading="lazy" src="../assets/photo-${n}.jpg" alt="">`;b.addEventListener('click',()=>{showPh(i);lb.showModal()});$('prow').appendChild(b)});
 
