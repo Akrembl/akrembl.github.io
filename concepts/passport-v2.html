@@ -110,8 +110,9 @@ section{padding-block:clamp(52px,7vw,90px)}
 .ic-spk .x{display:none}.muted .ic-spk .w{display:none}.muted .ic-spk .x{display:inline}
 /* morphing featured stage */
 .f-stage{margin:0 auto;transition:width .8s cubic-bezier(.65,0,.35,1),height .8s cubic-bezier(.65,0,.35,1)}
-.f-stage video{transition:opacity .35s ease}
-.f-stage.swap video{opacity:0}
+.f-stage video{cursor:pointer}
+.f-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease;pointer-events:none}
+.f-cover.on{opacity:1}
 /* scroll motion */
 .anim .rv{opacity:0;transform:translateY(32px);transition:opacity .8s ease var(--d,0s),transform 1s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
 .anim .rv.rv-zoom{transform:translateY(24px) scale(.95)}
@@ -435,7 +436,8 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
   media.forEach((m,j)=>{const b=document.createElement('button');b.type='button';b.className='thumb-b';b.setAttribute('aria-pressed',j===0);b.setAttribute('aria-label',(m.kind==='video'?'Play ':'View photo: ')+m.label);
     b.innerHTML=`<img loading="lazy" src="${m.poster}" alt=""><span class="ty" aria-hidden="true">${m.kind==='video'?'▶':'◼'}</span><span>${esc(m.label)}</span>`;
     b.addEventListener('click',()=>{thumbs.querySelectorAll('.thumb-b').forEach(x=>x.setAttribute('aria-pressed',x===b));clearPhoto();
-      if(m.kind==='video'){fv.hidden=false;fv.poster=m.poster;fv.src=m.src;userPaused=false;fv.play().catch(()=>{})}
+      if(m.kind==='video'){if(fv.getAttribute('src')===m.src)return;fv.hidden=false;cover.src=m.poster;cover.classList.add('on');userPaused=false;
+        setTimeout(()=>{fv.poster=m.poster;fv.src=m.src;fv.play().catch(()=>{})},420)}
       else{fv.pause();photo=document.createElement('img');photo.className='f-photo';photo.src=m.src;photo.alt='Sri Lanka photo: '+m.label;stageEl.insertBefore(photo,fv.nextSibling)}});
     thumbs.appendChild(b)});
   if(!reduce)new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){if(!userPaused&&!photo)fv.play().catch(()=>{})}else fv.pause()}),{threshold:.45}).observe(fv);
@@ -472,12 +474,17 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
     navigator.clipboard?navigator.clipboard.writeText(v).then(done,sel):sel()}));
   /* featured stage follows each film's own shape (16:9 or 4:3) */
   let fRatio=16/9;
-  const fitStage=anim=>{const full=stageEl.parentElement.clientWidth,maxH=innerHeight*.78,w=Math.min(full,maxH*fRatio);
-    if(!anim)stageEl.style.transition='none';stageEl.style.width=w+'px';stageEl.style.height=w/fRatio+'px';if(!anim){void stageEl.offsetWidth;stageEl.style.transition=''}};
-  const onMeta=anim=>{if(fv.videoWidth){fRatio=fv.videoWidth/fv.videoHeight;fitStage(anim)}setTimeout(()=>stageEl.classList.remove('swap'),anim?450:0)};
+  stageEl.style.maxHeight='none';
+  const fitStage=anim=>{const w=stageEl.parentElement.clientWidth,h=Math.min(w/fRatio,innerHeight*.88);
+    if(!anim)stageEl.style.transition='none';stageEl.style.width=w+'px';stageEl.style.height=h+'px';if(!anim){void stageEl.offsetWidth;stageEl.style.transition=''}};
+  const cover=document.createElement('img');cover.className='f-cover';cover.alt='';stageEl.insertBefore(cover,fv.nextSibling);
+  const onMeta=anim=>{if(fv.videoWidth){fRatio=fv.videoWidth/fv.videoHeight;fitStage(anim)}};
+  const reveal=()=>setTimeout(()=>cover.classList.remove('on'),120);
+  fv.addEventListener('playing',reveal);fv.addEventListener('loadeddata',()=>{if(fv.paused)reveal()});
+  fv.addEventListener('click',()=>fPlay.click());
   fv.addEventListener('loadedmetadata',()=>onMeta(true));
   addEventListener('resize',()=>fitStage(false));if(fv.readyState>=1)onMeta(false);else fitStage(false);
-  thumbs.addEventListener('click',e=>{if(e.target.closest('.thumb-b'))stageEl.classList.add('swap')},true);
+
 
   /* gentle motion on scroll */
   if(!reduce&&'IntersectionObserver' in window){
