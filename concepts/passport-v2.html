@@ -374,10 +374,9 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
 
   /* hero window reel */
   const reel=$('reel'),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const LOOP_START=1,LOOP_LEN=2; // a 2-second loop, not the whole clip
-  reel.src="../assets/loop-postcard5.mp4";
-  reel.addEventListener('loadedmetadata',()=>{reel.currentTime=LOOP_START;if(!reduce)reel.play().catch(()=>{})});
-  reel.addEventListener('timeupdate',()=>{if(reel.currentTime>=LOOP_START+LOOP_LEN||reel.currentTime<LOOP_START-.2)reel.currentTime=LOOP_START});
+  // montage of 2-second shots from the Sri Lanka clips, looping
+  reel.src="../assets/window-montage.mp4";reel.loop=true;
+  if(!reduce)reel.play().catch(()=>{});
 
   /* featured film: plays by itself when scrolled into view */
   const fv=$('fVid'),fPlay=$('fPlay'),fSound=$('fSound'),fVol=$('fVol'),thumbs=$('fThumbs'),stageEl=fv.parentElement,SL=P.find(p=>p.id==='SL');
