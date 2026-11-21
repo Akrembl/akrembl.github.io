@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:title" content="Akrem Ben Lagha · Filmmaker">
+<meta property="og:description" content="Filmmaker, videographer and editor based in Doha, Qatar.">
+<meta property="og:image" content="assets/still-LANKA2.jpg">
+<meta name="theme-color" content="#0d1312">
+<title>Akrem Ben Lagha</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Akrem Ben Lagha, filmmaker, videographer and editor based in Doha, Qatar. Travel films, brand campaigns, music videos and weddings, shot and graded end to end.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: letterboxed cinema frame up top, then a contact-sheet of work, an edit-bay "about", and a slate-style contact card. Single dark look, like a grading suite. */
+:root{
+  --ink:#0d1312;          /* sea at dusk */
+  --ink-2:#141c1a;
+  --line:#26312e;
+  --sand:#ece4d4;         /* beach sand, main text */
+  --mute:#93a09a;         /* sea-foam grey */
+  --amber:#eaa45c;        /* golden hour, used sparingly */
+  --teal:#7bb3a6;
+  --display:"Big Shoulders Display","Oswald","Arial Narrow",Impact,sans-serif;
+  --body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gut:max(16px,env(safe-area-inset-left,0px));
+  --gut-r:max(16px,env(safe-area-inset-right,0px));
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--ink)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--ink);color:var(--sand);font:400 16px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut-r)}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+h1,h2,h3{font-family:var(--display);font-weight:700;text-transform:uppercase;line-height:.95;margin:0;text-wrap:balance;letter-spacing:.01em}
+h2{font-size:clamp(40px,6vw,76px)}
+section{padding-block:clamp(64px,9vw,120px)}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+.sec-head p{max-width:46ch;margin:0;color:var(--mute)}
+
+/* header */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ink)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--ink) 82%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px}
+.brand{font-family:var(--display);font-weight:900;font-size:22px;text-transform:uppercase;letter-spacing:.04em;text-decoration:none}
+.brand span{color:var(--amber)}
+.nav{display:flex;gap:22px;align-items:center}
+.nav a{text-decoration:none;font-size:14px;color:var(--mute)}
+.nav a:hover{color:var(--sand)}
+.nav .cta{color:var(--ink);background:var(--sand);padding:8px 14px;border-radius:999px;font-weight:600}
+.nav .cta:hover{background:var(--amber);color:var(--ink)}
+@media (max-width:640px){.nav a:not(.cta){display:none}}
+
+/* hero: letterboxed frame */
+.hero{padding-block:20px 0}
+.frame{position:relative;aspect-ratio:2.39/1;max-width:100%;background:#000;overflow:hidden;border-radius:4px}
+@media (max-width:720px){.frame{aspect-ratio:4/5}}
+.frame video,.frame img.poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,0) 40%,rgba(5,10,9,.78) 100%);pointer-events:none}
+.hud{position:absolute;z-index:2;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(14px,2.4vw,28px)}
+.hud-top,.hud-bot{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.hud .mono{color:rgba(236,228,212,.82)}
+.rec{display:inline-flex;align-items:center;gap:8px}
+.rec i{width:8px;height:8px;border-radius:50%;background:#e2554a;animation:blink 1.6s steps(1) infinite}
+@keyframes blink{50%{opacity:.15}}
+@media (prefers-reduced-motion:reduce){.rec i{animation:none}}
+.hero h1{font-size:clamp(54px,11vw,168px);font-weight:900;letter-spacing:-.005em;color:var(--sand)}
+.hero h1 em{font-style:normal;color:var(--amber)}
+.hero-sub{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;padding-top:22px}
+.hero-sub p{margin:0;max-width:52ch;font-size:clamp(17px,1.6vw,20px);color:var(--sand)}
+.hero-sub p b{color:var(--amber);font-weight:500}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--mute);white-space:nowrap}
+.chip.live{color:var(--sand);border-color:color-mix(in srgb,var(--teal) 50%,var(--line))}
+.chip.live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--teal);margin-right:7px;vertical-align:1px}
+
+/* featured film */
+.feature{display:grid;grid-template-columns:1.35fr 1fr;gap:clamp(20px,3vw,40px);align-items:start}
+@media (max-width:900px){.feature{grid-template-columns:1fr}}
+.feature > *{min-width:0}
+.player{position:relative;aspect-ratio:16/9;background:#000;border-radius:4px;overflow:hidden}
+.player video{width:100%;height:100%;object-fit:cover}
+.reels{display:flex;gap:10px;margin-top:10px}
+.reels button{flex:1;min-width:0;padding:0;border:1px solid var(--line);background:#000;border-radius:3px;cursor:pointer;position:relative;aspect-ratio:16/9;overflow:hidden;color:var(--sand)}
+.reels button img{width:100%;height:100%;object-fit:cover;opacity:.6;transition:opacity .2s}
+.reels button[aria-pressed="true"]{border-color:var(--amber)}
+.reels button[aria-pressed="true"] img,.reels button:hover img{opacity:1}
+.reels button span{position:absolute;left:6px;bottom:4px;font:500 10px var(--mono);letter-spacing:.06em;text-shadow:0 1px 3px #000}
+.feature-copy h3{font-size:clamp(34px,4vw,54px);margin:8px 0 16px}
+.feature-copy p{color:var(--mute);margin:0 0 18px;max-width:52ch}
+.specs{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:22px 0 0;padding:16px 0 0;border-top:1px solid var(--line);font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums}
+.specs dt{color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+.specs dd{margin:0}
+.stills{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:clamp(20px,3vw,36px)}
+.stills figure{margin:0;overflow:hidden;border-radius:3px;background:var(--ink-2)}
+.stills img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.stills figure:hover img{transform:scale(1.04)}
+.stills .p{aspect-ratio:9/16}
+.stills .w{grid-column:span 2;aspect-ratio:auto}
+@media (max-width:760px){.stills{grid-template-columns:repeat(2,1fr)}.stills .w{grid-column:span 2;aspect-ratio:16/9}}
+
+/* work grid */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.filters button{font:500 13px var(--body);color:var(--mute);background:transparent;border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer}
+.filters button:hover{color:var(--sand)}
+.filters button[aria-pressed="true"]{background:var(--sand);color:var(--ink);border-color:var(--sand)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,24px)}
+@media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+.card{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;cursor:pointer;min-width:0}
+.card:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
+.thumb{position:relative;aspect-ratio:808/632;border-radius:4px;overflow:hidden;background:var(--ink-2);border:1px solid var(--line)}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .4s}
+.card:hover .thumb img{transform:scale(1.045)}
+.thumb .fallback{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:16px;background:
+  radial-gradient(120% 90% at 85% 10%,color-mix(in srgb,var(--hue) 38%,transparent),transparent 60%),
+  linear-gradient(160deg,var(--ink-2),#0a0f0e)}
+.thumb .fallback b{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(30px,3.4vw,44px);line-height:.92;color:var(--sand);max-width:12ch}
+.thumb .fallback .mono{color:color-mix(in srgb,var(--hue) 70%,var(--sand))}
+.thumb .play{position:absolute;right:12px;bottom:12px;z-index:2;width:44px;height:44px;border-radius:50%;background:rgba(13,19,18,.72);backdrop-filter:blur(6px);display:grid;place-items:center;border:1px solid rgba(236,228,212,.25);transition:background .2s}
+.card:hover .play{background:var(--amber)}
+.card:hover .play svg{fill:var(--ink)}
+.play svg{width:14px;height:14px;fill:var(--sand);margin-left:2px}
+.tc{position:absolute;left:12px;top:12px;z-index:2;font:500 10.5px var(--mono);letter-spacing:.08em;color:var(--sand);background:rgba(0,0,0,.45);padding:3px 7px;border-radius:2px}
+.meta{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.meta h3{font-size:24px;letter-spacing:.02em}
+.meta .mono{white-space:nowrap}
+.card p{margin:0;color:var(--mute);font-size:14.5px;line-height:1.5}
+
+/* about */
+.about{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(28px,5vw,72px)}
+@media (max-width:900px){.about{grid-template-columns:1fr}}
+.about > *{min-width:0}
+.portrait{position:relative;border-radius:4px;overflow:hidden;aspect-ratio:4/5}
+.portrait img{width:100%;height:100%;object-fit:cover}
+.portrait figcaption{position:absolute;left:12px;bottom:10px;font:500 10.5px var(--mono);letter-spacing:.08em;color:var(--sand);text-transform:uppercase;text-shadow:0 1px 4px #000}
+.lead{font-size:clamp(20px,2vw,25px);line-height:1.45;margin:22px 0 28px;max-width:34ch}
+.lead em{font-style:normal;color:var(--amber)}
+.timeline{list-style:none;margin:0 0 36px;padding:0;border-top:1px solid var(--line)}
+.timeline li{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+@media (max-width:520px){.timeline li{grid-template-columns:1fr;gap:4px}}
+.timeline .when{font:500 12px var(--mono);color:var(--mute);letter-spacing:.04em;padding-top:3px;font-variant-numeric:tabular-nums}
+.timeline h4{margin:0;font-size:17px;font-weight:600}
+.timeline .org{color:var(--teal);font-size:14px}
+.timeline p{margin:6px 0 0;color:var(--mute);font-size:14.5px}
+.kit{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media (max-width:620px){.kit{grid-template-columns:1fr}}
+.kit h5{margin:0 0 10px;font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--amber)}
+.kit ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14.5px}
+.kit li span{color:var(--mute)}
+
+/* contact slate */
+.slate{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--ink-2)}
+.slate-bar{height:22px;background:repeating-linear-gradient(-45deg,var(--sand) 0 18px,var(--ink) 18px 36px);opacity:.9}
+.slate-body{padding:clamp(22px,4vw,48px);display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(24px,4vw,56px)}
+@media (max-width:860px){.slate-body{grid-template-columns:1fr}}
+.slate-body > *{min-width:0}
+.slate h2{font-size:clamp(46px,7vw,96px)}
+.slate h2 em{font-style:normal;color:var(--amber)}
+.slate .intro{color:var(--mute);max-width:44ch;margin:18px 0 26px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;text-decoration:none;font-weight:600;font-size:15px;border:1px solid var(--sand);cursor:pointer;background:transparent;color:var(--sand);font-family:var(--body)}
+.btn.solid{background:var(--sand);color:var(--ink)}
+.btn:hover{background:var(--amber);border-color:var(--amber);color:var(--ink)}
+.btn svg{width:16px;height:16px;fill:currentColor}
+.fields{display:grid;grid-template-columns:1fr;border-top:1px solid var(--line)}
+.field{display:grid;grid-template-columns:110px 1fr auto;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.field .mono{font-size:11px}
+.field a,.field .val{font-size:clamp(15px,1.6vw,18px);text-decoration:none;overflow-wrap:anywhere;user-select:all}
+.field a:hover{color:var(--amber)}
+.copy{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);background:none;border:1px solid var(--line);border-radius:999px;padding:6px 10px;cursor:pointer}
+.copy:hover{color:var(--sand);border-color:var(--mute)}
+@media (max-width:460px){.field{grid-template-columns:1fr auto}.field .mono{grid-column:1/-1}}
+footer{padding-block:28px 40px;border-top:1px solid var(--line);margin-top:clamp(48px,7vw,90px)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* modal */
+dialog{border:0;padding:0;background:transparent;max-width:min(1100px,94vw);width:100%;color:var(--sand)}
+dialog::backdrop{background:rgba(4,7,6,.88);backdrop-filter:blur(4px)}
+.m{background:var(--ink-2);border:1px solid var(--line);border-radius:6px;overflow:hidden;max-height:90vh;display:flex;flex-direction:column}
+.m-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.m-head h3{font-size:28px}
+.m-close{background:none;border:1px solid var(--line);color:var(--sand);border-radius:999px;width:36px;height:36px;cursor:pointer;font-size:18px;flex:none}
+.m-body{overflow:auto;padding:18px;display:flex;flex-direction:column;gap:16px}
+.m-body p{margin:0;color:var(--mute);max-width:70ch}
+.vids{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.vids iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:4px;background:#000}
+.vids.vertical iframe{aspect-ratio:9/16}
+.out{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:22px;border:1px dashed var(--line);border-radius:4px}
+.out img{width:220px;max-width:100%;border-radius:3px}
+</style>
+
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">Akrem<span>.</span>BL</a>
+    <nav class="nav" aria-label="Main">
+      <a href="#work">Work</a>
+      <a href="#sri-lanka">Sri Lanka</a>
+      <a href="#about">About</a>
+      <a class="cta" href="#contact">Hire me</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="frame">
+        <img class="poster" src="assets/still-postcard6.jpg" alt="">
+        <video id="heroVid" muted playsinline autoplay preload="auto" poster="assets/still-postcard6.jpg" aria-label="Sri Lanka footage reel"></video>
+        <div class="hud">
+          <div class="hud-top">
+            <span class="mono rec"><i></i>Showreel · Sri Lanka</span>
+            <span class="mono" id="tc">TC 00:00:00:00</span>
+          </div>
+          <div class="hud-bot">
+            <h1>Akrem<br>Ben <em>Lagha</em></h1>
+          </div>
+        </div>
+      </div>
+      <div class="hero-sub">
+        <p>Filmmaker, videographer and editor based in <b>Doha, Qatar</b>. I take a film from the camera to the final grade on my own: shooting, editing, color and motion.</p>
+        <div class="chips">
+          <span class="chip live">Available full time &amp; freelance</span>
+          <span class="chip">Ready to travel</span>
+          <span class="chip">Since 2021</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sri-lanka">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="mono">Featured project · Travel film</div>
+          <h2>Sri Lanka<br>surf trip</h2>
+        </div>
+        <p>Travel and adventure films are the work I want to make full time. This one follows a surf trip along the south coast, from fishing harbours to the line-up.</p>
+      </div>
+      <div class="feature">
+        <div>
+          <div class="player">
+            <video id="film" controls playsinline preload="metadata" poster="assets/still-LANKA2.jpg">
+              <source src="assets/film-LANKA2.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="reels" role="group" aria-label="Choose a film">
+            <button type="button" aria-pressed="true" data-src="assets/film-LANKA2.mp4" data-poster="assets/still-LANKA2.jpg"><img src="assets/still-LANKA2.jpg" alt=""><span>Film 01 · 0:41</span></button>
+            <button type="button" aria-pressed="false" data-src="assets/film-LANKA1.mp4" data-poster="assets/still-LANKA1.jpg"><img src="assets/still-LANKA1.jpg" alt=""><span>Film 02 · 0:20</span></button>
+            <button type="button" aria-pressed="false" data-src="assets/loop-postcard6.mp4" data-poster="assets/still-postcard6.jpg"><img src="assets/still-postcard6.jpg" alt=""><span>Postcard · 0:10</span></button>
+            <button type="button" aria-pressed="false" data-src="assets/loop-postcard1.mp4" data-poster="assets/still-postcard1.jpg"><img src="assets/still-postcard1.jpg" alt=""><span>Postcard · 0:10</span></button>
+          </div>
+        </div>
+        <div class="feature-copy">
+          <div class="mono">Shot · Edited · Graded</div>
+          <h3>Salt, swell &amp; slow mornings</h3>
+          <p>A run of short films and stills from the trip: surfers, fishermen up before the sun, harbour boats and street life between sessions. Shot handheld and finished with a soft, filmic grade that keeps the sea green and the skin warm.</p>
+          <p>The Behance project holds the full set of five clips.</p>
+          <dl class="specs">
+            <dt>Format</dt><dd>16:9 &amp; 4:3 · 23.976 fps</dd>
+            <dt>Role</dt><dd>Director, camera, edit, color</dd>
+            <dt>Deliverables</dt><dd>2 films, 4 postcards, stills</dd>
+            <dt>Location</dt><dd>South coast, Sri Lanka</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="stills">
+        <figure class="p"><img loading="lazy" src="assets/photo-d3-25.jpg" alt="Surfer carrying her board along the shore"></figure>
+        <figure class="p"><img loading="lazy" src="assets/photo-d3-52.jpg" alt="Surfer walking out of the waves with his board"></figure>
+        <figure class="p"><img loading="lazy" src="assets/photo-d3-13.jpg" alt="Woman on the beach in front of a painted fishing boat"></figure>
+        <figure class="p"><img loading="lazy" src="assets/photo-d3-65.jpg" alt="Surfer waxing her board outside a surf shack"></figure>
+        <figure class="w"><img loading="lazy" src="assets/photo-dd3-8.jpg" alt="Surfer resting on the sand facing a small island"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="mono">Selected work · 2021 to now</div>
+          <h2>The work</h2>
+        </div>
+        <p>Brand campaigns, music videos, live concerts, weddings and social reels, made with Lumiere Agency in Doha and Another Vision Production in Tunisia.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filter projects" id="filters"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section id="about" style="padding-top:0">
+    <div class="wrap about">
+      <figure class="portrait" style="margin:0">
+        <img loading="lazy" src="assets/photo-dd3-12.jpg" alt="Surfer sitting on the beach looking out at an island, from the Sri Lanka series">
+        <figcaption>From the Sri Lanka series</figcaption>
+      </figure>
+      <div>
+        <div class="mono">About</div>
+        <h2>Camera to<br>final grade</h2>
+        <p class="lead">I'm a Tunisian filmmaker based in Doha. I've been shooting and editing professionally since 2021, and I like owning the whole film: <em>the shoot, the cut, the color and the motion</em>.</p>
+        <ul class="timeline">
+          <li>
+            <div class="when">Oct 2026 – Now</div>
+            <div><h4>Video Producer, Camera Operator &amp; Lead Editor</h4><div class="org">Lumiere Agency · Doha, Qatar</div><p>Client videos from brief to final delivery. I run camera on shoots and lead the edit, from first cut to color grade and export.</p></div>
+          </li>
+          <li>
+            <div class="when">Ongoing · Remote</div>
+            <div><h4>Freelance Wedding Film Editor</h4><div class="org">Ais Art Prod &amp; Ais Art Wedding</div><p>I edit every wedding film the studio shoots, from raw footage to final delivery.</p></div>
+          </li>
+          <li>
+            <div class="when">May 2021 – Sep 2025</div>
+            <div><h4>Videographer &amp; Video Editor</h4><div class="org">Another Vision Production · Tunisia</div><p>Four years of commercial, creative and wedding work: shooting, lighting, editing and grading, including Instagram reels for local businesses and cinematic wedding teasers.</p></div>
+          </li>
+        </ul>
+        <div class="kit">
+          <div>
+            <h5>Craft</h5>
+            <ul><li>Cinematic shooting</li><li>Storytelling</li><li>Color grading</li><li>Motion graphics</li></ul>
+          </div>
+          <div>
+            <h5>Edit bay</h5>
+            <ul><li>DaVinci Resolve <span>· main</span></li><li>Adobe Premiere Pro</li><li>Adobe After Effects</li></ul>
+          </div>
+          <div>
+            <h5>Formats &amp; languages</h5>
+            <ul><li>Long form &amp; multicam</li><li>Reels, TikTok, Shorts</li><li>Arabic · French · English</li></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="padding-top:0">
+    <div class="wrap">
+      <div class="slate">
+        <div class="slate-bar" aria-hidden="true"></div>
+        <div class="slate-body">
+          <div>
+            <div class="mono">Scene: next project · Take 1</div>
+            <h2>Let's make<br>a <em>film</em></h2>
+            <p class="intro">Open to full-time roles and freelance shoots. Based in Doha and able to join a trip at short notice.</p>
+            <div class="btns">
+              <a class="btn solid" href="https://wa.me/97433396359" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>
+                WhatsApp me</a>
+              <a class="btn" href="assets/Akrem_Ben_Lagha_CV.pdf" target="_blank" rel="noopener" id="cvBtn">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11.2l4.1-4.1 1.4 1.4L12 17l-5.5-5.5 1.4-1.4 4.1 4.1V3h2ZM5 19h14v2H5z"/></svg>
+                Download CV</a>
+            </div>
+          </div>
+          <div class="fields">
+            <div class="field"><span class="mono">Email</span><a href="mailto:akrembenlagha@yahoo.fr">akrembenlagha@yahoo.fr</a><button class="copy" type="button" data-copy="akrembenlagha@yahoo.fr">Copy</button></div>
+            <div class="field"><span class="mono">WhatsApp</span><a href="https://wa.me/97433396359" target="_blank" rel="noopener">+974 3339 6359</a><button class="copy" type="button" data-copy="+974 3339 6359">Copy</button></div>
+            <div class="field"><span class="mono">Instagram</span><a href="https://www.instagram.com/akreem.bl/" target="_blank" rel="noopener">@akreem.bl</a><span></span></div>
+            <div class="field"><span class="mono">YouTube</span><a href="https://www.youtube.com/@AkremBenLagha" target="_blank" rel="noopener">@AkremBenLagha</a><span></span></div>
+            <div class="field"><span class="mono">Behance</span><a href="https://www.behance.net/akrembenlagha1" target="_blank" rel="noopener">behance.net/akrembenlagha1</a><span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="mono">© <span id="yr">2026</span> Akrem Ben Lagha</span>
+    <span class="mono">Doha, Qatar · 25.2854° N, 51.5310° E</span>
+  </div>
+</footer>
+
+<dialog id="modal" aria-labelledby="mTitle">
+  <div class="m">
+    <div class="m-head"><h3 id="mTitle"></h3><button class="m-close" type="button" aria-label="Close">✕</button></div>
+    <div class="m-body" id="mBody"></div>
+  </div>
+</dialog>
+
+<script>
+(function(){
+  const CDN="https://mir-s3-cdn-cf.behance.net/projects/max_808/";
+  const P="https://www-ccv.adobe.io/v1/player/ccv/";
+  const BH="https://www.behance.net/gallery/";
+  const projects=[
+    {t:"Sri Lanka Surf Trip",cat:"travel",tag:"Travel film",hue:"#7bb3a6",img:"assets/still-LANKA1.jpg",local:true,url:"258567637/Sri-Lanka-surf-trip",
+     d:"Surf and travel film from the south coast of Sri Lanka.",v:["RI4v8IPm3DW","Lx-Fn5La7qS","5EFUvEnovsX","2GfM3PvwewD","425RngWPQag"],scroll:"sri-lanka"},
+    {t:"MIA Qatar",cat:"travel",tag:"Location film",hue:"#c9a06b",img:"19be7f258568073.Y3JvcCwxMDM1LDgxMCwxNzksMA.png",url:"258568073/MIA-Qatar",
+     d:"A location film at the Museum of Islamic Art in Doha, Qatar.",v:["8b5LIk2Kzzf"]},
+    {t:"Summer Lifestyle Reels",cat:"travel",tag:"Short form",hue:"#eaa45c",img:"433eb4254310487.Y3JvcCwxMTcwLDkxNSwwLDgwNw.png",url:"254310487/Summer-Lifestyle-Reels",vertical:true,
+     d:"Spontaneous summer moments filmed with friends, shot casually and finished with a film-inspired grade for a nostalgic, timeless feel.",v:["B9ogRXffDw2","3icnXhg_8Jt","IijB-CCvQoL","A7jxXa-DUIT","Hc3aYrXPHBe"]},
+    {t:"Final Choice Campaign",cat:"brands",tag:"Clothing brand",hue:"#d8d2c4",img:"1e0b93254309917.Y3JvcCwxNDk1LDExNzAsNTE4LDA.png",url:"254309917/Clothing-Brand-Campaign",vertical:true,
+     d:"A campaign for Final Choice across two T-shirt drops: bold visual storytelling, dynamic product shots and a contemporary fashion look.",v:["IVgEcwRFqwy","F_xPCIfjwsC","UuTL_8BgXxM","Rb2wS3KR5A7","448uCPXmmZI","8BFnvpkDKPg"]},
+    {t:"Najla Skander Music Video",cat:"music",tag:"Music video",hue:"#e2554a",img:"b8ef7d254309763.Y3JvcCwxNDk1LDExNzAsNTE4LDA.png",url:"254309763/Music-Video",
+     d:"A last-minute project: shot in two hours with no planning, then edited and graded in two days.",v:["LQACFg_UDV3"]},
+    {t:"Wedding Cinematic Teaser",cat:"weddings",tag:"Wedding film",hue:"#e8c9a6",img:"69ed82254309289.Y3JvcCwxNDk0LDExNjksMjg4LDA.jpg",url:"254309289/Wedding-Cinematic-Teaser",
+     d:"A cinematic wedding teaser, shot and cut for emotion and pace.",v:["72Sn7Au9rDz"]},
+    {t:"Nordo Concert Video",cat:"music",tag:"Live concert",hue:"#8b7bd8",img:"b1f2fe240054347.Y3JvcCw1MTIsNDAwLDIwMCwxMDk.png",url:"240054347/Nordo-Concert-Video",
+     d:"A live concert film for Nordo, made with Another Vision Production.",v:["6KSDkbTguTt"]},
+    {t:"Intro: Text & 3D Motion",cat:"motion",tag:"Motion graphics",hue:"#6fb7e0",img:"b4cce2240021981.Y3JvcCw1MTUsNDAyLDIxMSwxNjg.png",url:"240021981/Intro-Text-Animation-3D-Motion",
+     d:"A title intro built with text animation and 3D motion.",v:["TAP4BVa_tom"]},
+    {t:"AI Realism & Consistency",cat:"motion",tag:"AI video",hue:"#b48be0",img:"f9ad81254310143.Y3JvcCwxMDE1LDc5NCwyMCwxODY.jpg",url:"254310143/AI-Generated-Videos",vertical:true,
+     d:"AI-generated videos exploring photorealism, facial consistency and continuity, using my own face and friends' as references across scenes and styles.",v:["HvxHo5hm8iD","U9DKjbtRhib","FNNeBmhQrUi","B8xF3Qu7aId","S2vHVcro7Xd","QWv5PoC4Av3"]},
+    {t:"Blue Island",cat:"brands",tag:"Clothing brand",hue:"#5f9fd6",img:"0ec9a0240053091.Y3JvcCw0ODksMzgyLDI0NSwxOTg.png",url:"240053091/Blue-Island-Clothing-Brand",
+     d:"A brand film for Blue Island clothing, made with Another Vision Production.",v:["KYWq78SYa4T"]},
+    {t:"Ayla Brand",cat:"brands",tag:"Clothing brand",hue:"#e0a3a0",img:"cdbdbd240004523.Y3JvcCwxNjQ2LDEyODcsNTEzLDE2Nw.png",url:"240004523/Ayla-Clothing-Brand",vertical:true,
+     d:"Three videos for Ayla's new collection and in-store experience: clothing details, styling and a clean, modern fashion feel.",v:["3rrYanBjgHR","JpiARRW9Goo","T2dbyXHY-z5"]},
+    {t:"Ramadan Restaurant Reel",cat:"brands",tag:"Instagram reel",hue:"#eaa45c",img:"4e78f4240056669.Y3JvcCw1MDAsMzkxLDIxMywxOTQ.png",url:"240056669/Restaurant-Instagram-Reel-For-Ramadhan-AV-Prod",vertical:true,
+     d:"An Instagram reel for a restaurant's Ramadan menu, made with Another Vision Production.",v:["HqGYcJuLaoE"]}
+  ];
+  const cats=[["all","All work"],["brands","Brands"],["music","Music & live"],["travel","Travel & lifestyle"],["weddings","Weddings"],["motion","Motion & AI"]];
+  // Behance's video player can't run inside the preview frame, so there we link out instead.
+  const canEmbed=!/claude|anthropic/i.test(location.hostname);
+  const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  const grid=document.getElementById('grid'),filters=document.getElementById('filters');
+  cats.forEach(([k,l],i)=>{const b=document.createElement('button');b.type='button';b.textContent=l;b.dataset.k=k;b.setAttribute('aria-pressed',i===0);filters.appendChild(b)});
+  function render(k){
+    grid.innerHTML='';
+    projects.filter(p=>k==='all'||p.cat===k).forEach((p,i)=>{
+      const b=document.createElement('button');b.className='card';b.type='button';b.setAttribute('aria-label','Watch '+p.t);
+      const src=p.local?p.img:CDN+p.img;
+      b.innerHTML=`<div class="thumb" style="--hue:${p.hue}">
+          <div class="fallback"><span class="mono">${esc(p.tag)}</span><b>${esc(p.t)}</b></div>
+          <img loading="lazy" src="${src}" alt="" onerror="this.remove()">
+          <span class="tc">${p.v.length} ${p.v.length>1?'videos':'video'}</span>
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></span>
+        </div>
+        <div class="meta"><h3>${esc(p.t)}</h3><span class="mono">${esc(p.tag)}</span></div>
+        <p>${esc(p.d)}</p>`;
+      b.addEventListener('click',()=>open(p));
+      grid.appendChild(b);
+    });
+  }
+  filters.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;filters.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));render(b.dataset.k)});
+  render('all');
+
+  const modal=document.getElementById('modal'),mBody=document.getElementById('mBody'),mTitle=document.getElementById('mTitle');
+  function open(p){
+    if(p.scroll&&!canEmbed){document.getElementById(p.scroll).scrollIntoView();return}
+    mTitle.textContent=p.t;
+    const link=`<a class="btn" href="${BH+p.url}" target="_blank" rel="noopener">View on Behance ↗</a>`;
+    if(canEmbed){
+      mBody.innerHTML=`<p>${esc(p.d)}</p><div class="vids${p.vertical?' vertical':''}">${p.v.map(id=>`<iframe src="${P+id}/embed?api_key=behance1&bgcolor=%23141c1a" allow="autoplay; fullscreen" allowfullscreen loading="lazy" title="${esc(p.t)} video"></iframe>`).join('')}</div><div>${link}</div>`;
+    }else{
+      const src=p.local?p.img:CDN+p.img;
+      mBody.innerHTML=`<p>${esc(p.d)}</p><div class="out"><img src="${src}" alt="" onerror="this.remove()"><div><p style="margin-bottom:12px">${p.v.length} ${p.v.length>1?'videos':'video'} on Behance.</p>${link}</div></div>`;
+    }
+    modal.showModal();
+  }
+  function close(){modal.close();mBody.innerHTML=''}
+  modal.querySelector('.m-close').addEventListener('click',close);
+  modal.addEventListener('click',e=>{if(e.target===modal)close()});
+  modal.addEventListener('close',()=>{mBody.innerHTML=''});
+
+  // hero reel: cycle the postcards, with a running timecode
+  const hv=document.getElementById('heroVid'),clips=["assets/loop-postcard6.mp4","assets/loop-postcard1.mp4","assets/loop-postcard4.mp4","assets/loop-postcard5.mp4"];
+  let ci=0,base=0;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function play(i){hv.src=clips[i];hv.play().catch(()=>{})}
+  if(!reduce){hv.addEventListener('ended',()=>{base+=hv.duration||0;ci=(ci+1)%clips.length;if(ci===0)base=0;play(ci)});play(0)}
+  else{hv.removeAttribute('autoplay')}
+  const tc=document.getElementById('tc'),pad=n=>String(Math.floor(n)).padStart(2,'0');
+  (function tick(){const t=base+(hv.currentTime||0);tc.textContent=`TC 00:${pad(t/60)}:${pad(t%60)}:${pad((t%1)*24)}`;requestAnimationFrame(tick)})();
+
+  // featured film switcher
+  const film=document.getElementById('film');
+  document.querySelector('.reels').addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    document.querySelectorAll('.reels button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    film.poster=b.dataset.poster;film.src=b.dataset.src;film.play().catch(()=>{});
+  });
+
+  // copy buttons
+  document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
+    const v=b.dataset.copy,done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1600)};
+    if(navigator.clipboard)navigator.clipboard.writeText(v).then(done,()=>sel(b));else sel(b);
+  }));
+  function sel(b){const el=b.previousElementSibling;const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+  document.getElementById('yr').textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
