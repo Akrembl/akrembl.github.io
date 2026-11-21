@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Akrem Ben Lagha · Green Screen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* Concept 4, Green Screen: the page is a chroma-key backdrop with tracking markers. Akrem's footage is keyed
+   into the giant letters of his name, project titles fill with their own frames on hover. Black type only. */
+:root{
+  --key:#14b04a;       /* chroma green */
+  --key-2:#109a40;
+  --black:#0b0f0c;
+  --white:#f4fff6;
+  --dim:rgba(11,15,12,.62);
+  --display:"Anton","Impact","Arial Narrow",sans-serif;
+  --body:"Inter Tight","Helvetica Neue",Arial,sans-serif;
+  --mono:"Space Mono",ui-monospace,Menlo,monospace;
+  --gl:max(16px,env(safe-area-inset-left,0px));--gr:max(16px,env(safe-area-inset-right,0px));
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--key)}
+body{margin:0;background:var(--key);color:var(--black);font:500 17px/1.55 var(--body);overflow-x:hidden;
+  background-image:radial-gradient(140% 90% at 50% 10%,rgba(255,255,255,.12),transparent 60%),radial-gradient(120% 80% at 50% 120%,rgba(0,0,0,.14),transparent 60%)}
+img,video,iframe,canvas{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--black);outline-offset:4px}
+.wrap{max-width:1400px;margin:0 auto;padding-left:var(--gl);padding-right:var(--gr)}
+.mono{font:400 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+/* tracking markers */
+.mk{position:absolute;width:22px;height:22px;pointer-events:none;opacity:.55}
+.mk::before,.mk::after{content:"";position:absolute;background:var(--black)}
+.mk::before{left:10px;top:0;width:2px;height:22px}
+.mk::after{top:10px;left:0;height:2px;width:22px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:14px;padding-block:20px;flex-wrap:wrap}
+.top nav{display:flex;gap:20px}
+.top nav a{text-decoration:none;font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.top nav a:hover{text-decoration:underline;text-underline-offset:4px}
+.rec{display:inline-flex;align-items:center;gap:8px}
+.rec i{width:9px;height:9px;border-radius:50%;background:#e0261b;animation:b 1.4s steps(1) infinite}
+@keyframes b{50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.rec i{animation:none}}
+
+.hero{position:relative;padding-block:10px 40px}
+.keyed{position:relative;width:100%}
+.keyed canvas{width:100%;height:auto}
+.keyed .fallback{font:400 clamp(80px,19vw,300px)/.82 var(--display);text-transform:uppercase;margin:0;letter-spacing:-.01em}
+.hero-foot{display:grid;grid-template-columns:1.2fr 1fr auto;gap:24px;align-items:end;margin-top:22px}
+@media (max-width:860px){.hero-foot{grid-template-columns:1fr}}
+.hero-foot p{margin:0;font-size:clamp(18px,1.8vw,23px);line-height:1.4;max-width:40ch;font-weight:500}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;background:var(--black);color:var(--key);text-decoration:none;font:700 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;border:2px solid var(--black);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--black)}
+.btn:hover{background:var(--white);color:var(--black);border-color:var(--white)}
+
+section{padding-block:clamp(60px,9vw,120px);position:relative}
+.label{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.label::after{content:"";flex:1;height:2px;background:var(--black);opacity:.85}
+
+/* about */
+.statement{margin:0;font:400 clamp(44px,7.6vw,118px)/.9 var(--display);text-transform:uppercase;letter-spacing:-.005em;text-wrap:balance}
+.statement em{font-style:normal;color:var(--white);-webkit-text-stroke:0}
+.about-g{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,72px);margin-top:clamp(28px,4vw,52px)}
+@media (max-width:860px){.about-g{grid-template-columns:1fr}}
+.about-g > *{min-width:0}
+.about-g p{margin:0 0 16px;max-width:52ch}
+.credits{list-style:none;margin:0;padding:0}
+.credits li{display:flex;align-items:baseline;gap:10px;padding:10px 0;border-bottom:2px solid rgba(11,15,12,.85)}
+.credits .r{font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;flex:none;width:120px}
+.credits .n{font:400 clamp(20px,2vw,26px)/1.1 var(--display);text-transform:uppercase;letter-spacing:.01em}
+.credits .n small{display:block;font:500 14px var(--body);text-transform:none;letter-spacing:0;color:var(--dim)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chips span{border:2px solid var(--black);border-radius:999px;padding:4px 12px;font:700 12px var(--mono);text-transform:uppercase;letter-spacing:.04em}
+
+/* work list */
+.list{border-top:2px solid var(--black)}
+.item{all:unset;box-sizing:border-box;display:grid;grid-template-columns:60px minmax(0,1fr) auto;align-items:center;gap:16px;width:100%;padding:clamp(8px,1.2vw,14px) 0;border-bottom:2px solid var(--black);cursor:pointer;position:relative}
+.item .no{font:700 13px var(--mono)}
+.item .tt{font:400 clamp(44px,8.4vw,132px)/.92 var(--display);text-transform:uppercase;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  background:var(--black);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:cover;background-position:center;transition:letter-spacing .4s ease}
+.item:hover .tt,.item:focus-visible .tt{background-image:var(--img);letter-spacing:.01em}
+.item .side{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+.item .side .mono{font-size:11px}
+@media (max-width:640px){.item{grid-template-columns:36px minmax(0,1fr)}.item .side{display:none}}
+@media (prefers-reduced-motion:reduce){.item .tt{transition:none}}
+.peek{position:fixed;z-index:40;width:280px;aspect-ratio:808/632;pointer-events:none;border:3px solid var(--black);background:#000 center/cover;opacity:0;transform:translate(-50%,-115%) rotate(-3deg);transition:opacity .15s}
+.peek.on{opacity:1}
+@media (hover:none){.peek{display:none}}
+
+/* contact */
+.cut{font:400 clamp(70px,15vw,240px)/.82 var(--display);text-transform:uppercase;margin:0 0 30px;letter-spacing:-.01em}
+.cut span{display:block;font:700 clamp(13px,1.2vw,16px) var(--mono);letter-spacing:.1em;margin-bottom:12px}
+.contact-g{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,72px)}
+@media (max-width:860px){.contact-g{grid-template-columns:1fr}}
+.contact-g > *{min-width:0}
+.c-row{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 0;border-bottom:2px solid var(--black)}
+.c-row a,.c-row .v{font:400 clamp(20px,2.2vw,30px)/1.1 var(--display);text-transform:uppercase;text-decoration:none;overflow-wrap:anywhere}
+.c-row a:hover{color:var(--white)}
+.copy{font:700 11px var(--mono);text-transform:uppercase;background:none;border:2px solid var(--black);border-radius:999px;padding:4px 10px;cursor:pointer}
+@media (max-width:460px){.c-row{grid-template-columns:minmax(0,1fr) auto}.c-row .mono{grid-column:1/-1}}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:34px 44px}
+
+dialog{border:0;padding:0;background:transparent;width:min(1100px,94vw);max-width:none}
+dialog::backdrop{background:rgba(11,15,12,.86)}
+.m{background:var(--key);border:3px solid var(--black);padding:clamp(14px,2.4vw,24px);max-height:90vh;overflow:auto}
+.m-h{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}
+.m-h h3{margin:0;font:400 clamp(34px,5vw,64px)/.9 var(--display);text-transform:uppercase}
+.m-x{width:42px;height:42px;border-radius:50%;border:2px solid var(--black);background:none;cursor:pointer;font:700 16px var(--mono);flex:none}
+.m p{margin:0 0 14px;max-width:70ch}
+.vids{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:14px}
+.vids iframe,.vids video{width:100%;aspect-ratio:16/9;border:0;background:#000}
+.m .cover{max-width:440px;width:100%;margin-bottom:14px;border:3px solid var(--black)}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <span class="mono rec"><i aria-hidden="true"></i>Akrem Ben Lagha · Take 01</span>
+    <nav aria-label="Main"><a href="#about">About</a><a href="#work">Work</a><a href="#contact">Contact</a></nav>
+  </header>
+
+  <section class="hero" style="padding-top:10px">
+    <span class="mk" style="left:0;top:0" aria-hidden="true"></span><span class="mk" style="right:0;top:0" aria-hidden="true"></span>
+    <span class="mk" style="left:0;bottom:120px" aria-hidden="true"></span><span class="mk" style="right:0;bottom:120px" aria-hidden="true"></span>
+    <div class="keyed" id="keyed">
+      <h1 class="fallback" id="fallback">Akrem<br>Ben Lagha</h1>
+      <canvas id="cv" aria-hidden="true" hidden></canvas>
+    </div>
+    <div class="hero-foot">
+      <p>Filmmaker, videographer and editor in Doha, Qatar. My footage, keyed into my name: I shoot it, cut it and grade it myself.</p>
+      <span class="mono">Footage: Sri Lanka surf trip · 23.976 fps</span>
+      <a class="btn" href="#contact">Hire me →</a>
+    </div>
+    <video id="src" muted playsinline preload="auto" crossorigin="anonymous" hidden></video>
+  </section>
+</div>
+
+<section id="about" style="padding-top:20px">
+  <div class="wrap">
+    <div class="label mono">About · Scene 02</div>
+    <p class="statement">Camera to <em>final grade.</em> One person, the whole film.</p>
+    <div class="about-g">
+      <div>
+        <p>I'm a Tunisian filmmaker based in Doha, shooting and editing professionally since 2021 across Tunisia and Qatar. I handle the shoot, the edit, the color and the motion graphics.</p>
+        <p>Travel and adventure films are the work I want to do full time, and I can leave Doha and join a trip at short notice.</p>
+        <div class="chips"><span>DaVinci Resolve</span><span>Premiere Pro</span><span>After Effects</span><span>Arabic</span><span>French</span><span>English</span></div>
+      </div>
+      <ul class="credits" aria-label="Experience">
+        <li><span class="r">2026 – now</span><span class="n">Lumiere Agency<small>Video Producer, Camera Operator &amp; Lead Editor · Doha</small></span></li>
+        <li><span class="r">Freelance</span><span class="n">Ais Art Prod &amp; Wedding<small>Wedding Film Editor · remote</small></span></li>
+        <li><span class="r">2021 – 2025</span><span class="n">Another Vision Production<small>Videographer &amp; Video Editor · Tunisia</small></span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="work" style="padding-top:0">
+  <div class="wrap">
+    <div class="label mono">Selected work · 12 projects · hover to key, tap to play</div>
+    <div class="list" id="list"></div>
+  </div>
+</section>
+
+<section id="contact" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="cut"><span>Next scene</span>Cut to: you.</h2>
+    <div class="contact-g">
+      <div>
+        <p style="margin:0;max-width:44ch;font-size:20px">Full-time roles or freelance shoots, in Doha or wherever the story is. Send the brief, dates and location.</p>
+        <div class="btns">
+          <a class="btn" href="https://wa.me/97433396359" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn ghost" href="mailto:akrembenlagha@yahoo.fr">Email</a>
+          <a class="btn ghost" href="../assets/Akrem_Ben_Lagha_CV.pdf" target="_blank" rel="noopener">CV ↓</a>
+        </div>
+      </div>
+      <div>
+        <div class="c-row"><span class="mono">Email</span><a href="mailto:akrembenlagha@yahoo.fr">akrembenlagha@yahoo.fr</a><button class="copy" type="button" data-copy="akrembenlagha@yahoo.fr">Copy</button></div>
+        <div class="c-row"><span class="mono">WhatsApp</span><a href="https://wa.me/97433396359" target="_blank" rel="noopener">+974 3339 6359</a><button class="copy" type="button" data-copy="+974 3339 6359">Copy</button></div>
+        <div class="c-row"><span class="mono">Instagram</span><a href="https://www.instagram.com/akreem.bl/" target="_blank" rel="noopener">@akreem.bl</a><span></span></div>
+        <div class="c-row"><span class="mono">YouTube</span><a href="https://www.youtube.com/@AkremBenLagha" target="_blank" rel="noopener">@AkremBenLagha</a><span></span></div>
+        <div class="c-row"><span class="mono">Behance</span><a href="https://www.behance.net/akrembenlagha1" target="_blank" rel="noopener">akrembenlagha1</a><span></span></div>
+      </div>
+    </div>
+    <footer class="mono"><span>© 2026 Akrem Ben Lagha</span><span>That's a wrap</span></footer>
+  </div>
+</section>
+
+<div class="peek" id="peek" aria-hidden="true"></div>
+<dialog id="modal" aria-labelledby="mT"><div class="m"><div class="m-h"><h3 id="mT"></h3><button class="m-x" type="button" aria-label="Close">✕</button></div><div id="mB"></div></div></dialog>
+
+<script src="../assets/projects.js"></script>
+<script>
+(function(){
+  const {P,CATS,BH,canEmbed,embed,esc}=window.AKREM;
+  /* keyed hero: draw the footage, then keep it only inside the letters */
+  const cv=document.getElementById('cv'),ctx=cv.getContext('2d'),src=document.getElementById('src'),fb=document.getElementById('fallback'),box=document.getElementById('keyed');
+  const clips=["../assets/loop-postcard6.mp4","../assets/loop-postcard1.mp4","../assets/loop-postcard4.mp4","../assets/loop-postcard5.mp4"];let ci=0;
+  const poster=new Image();poster.src="../assets/still-postcard6.jpg";
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let lines=["AKREM","BEN LAGHA"],fs=100,W=0,H=0;
+  function layout(){const d=devicePixelRatio||1;W=box.clientWidth;ctx.font=`400 100px Anton`;
+    const widest=Math.max(...lines.map(l=>ctx.measureText(l).width));fs=Math.floor(100*W/widest*.995);H=Math.round(fs*.86*lines.length+fs*.08);
+    cv.width=W*d;cv.height=H*d;cv.style.height=H+'px';ctx.setTransform(d,0,0,d,0,0)}
+  function draw(){const img=(src.readyState>=2&&!src.paused)||src.readyState>=2?src:poster;
+    const iw=img.videoWidth||img.naturalWidth,ih=img.videoHeight||img.naturalHeight;ctx.globalCompositeOperation='source-over';ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0b0f0c';ctx.fillRect(0,0,W,H);
+    const cover=(m,mw,mh)=>{if(!mw)return;const s=Math.max(W/mw,H/mh),dw=mw*s,dh=mh*s;ctx.drawImage(m,(W-dw)/2,(H-dh)/2,dw,dh)};
+    cover(poster,poster.naturalWidth,poster.naturalHeight);if(img!==poster)cover(img,iw,ih);
+    ctx.globalCompositeOperation='destination-in';ctx.fillStyle='#000';ctx.font=`400 ${fs}px Anton`;ctx.textBaseline='alphabetic';
+    lines.forEach((l,i)=>ctx.fillText(l,0,fs*.8+i*fs*.86));
+    if(!reduce)requestAnimationFrame(draw)}
+  document.fonts.load('400 100px Anton').then(()=>{fb.style.position='absolute';fb.style.clip='rect(0 0 0 0)';fb.style.width='1px';fb.style.height='1px';fb.style.overflow='hidden';
+    cv.hidden=false;layout();
+    src.src=clips[0];src.addEventListener('ended',()=>{ci=(ci+1)%clips.length;src.src=clips[ci];src.play().catch(()=>{})});
+    if(!reduce)src.play().catch(()=>{});
+    poster.complete?draw():poster.onload=draw;if(reduce){src.addEventListener('loadeddata',draw,{once:true})}
+  }).catch(()=>{});
+  addEventListener('resize',()=>{if(!cv.hidden){layout();if(reduce)draw()}});
+
+  /* work list */
+  const list=document.getElementById('list'),peek=document.getElementById('peek');
+  P.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='item';b.style.setProperty('--img',`url('${p.src}')`);
+    b.setAttribute('aria-label',`${p.t}, ${p.n} ${p.n>1?'videos':'video'}`);
+    b.innerHTML=`<span class="no">${String(i+1).padStart(2,'0')}</span><span class="tt">${esc(p.t)}</span><span class="side"><span class="mono">${esc(CATS[p.cat])}</span><span class="mono">${p.n} ${p.n>1?'videos':'video'}</span></span>`;
+    b.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;peek.style.backgroundImage=`url('${p.src}')`;peek.style.left=e.clientX+'px';peek.style.top=e.clientY+'px';peek.classList.add('on')});
+    b.addEventListener('pointerleave',()=>peek.classList.remove('on'));
+    b.addEventListener('click',()=>openP(p));list.appendChild(b)});
+
+  const md=document.getElementById('modal'),mB=document.getElementById('mB');
+  function openP(p){peek.classList.remove('on');document.getElementById('mT').textContent=p.t;
+    let v='';if(p.takes)v=p.takes.map(t=>`<video controls playsinline preload="metadata" poster="../${t[2]}" src="../${t[1]}"></video>`).join('');
+    else if(canEmbed)v=p.v.map(id=>`<iframe src="${embed(id)}" allow="autoplay; fullscreen" allowfullscreen loading="lazy" title="${esc(p.t)}"></iframe>`).join('');
+    mB.innerHTML=`<p class="mono" style="margin-bottom:8px">${esc(p.client)} · ${esc(p.role)}</p><p>${esc(p.d)}</p>${v?`<div class="vids">${v}</div>`:`<img class="cover" src="${p.src}" alt="" onerror="this.remove()">`}<a class="btn" href="${BH+p.url}" target="_blank" rel="noopener">Open on Behance ↗</a>`;md.showModal()}
+  md.querySelector('.m-x').addEventListener('click',()=>md.close());
+  md.addEventListener('click',e=>{if(e.target===md)md.close()});
+  md.addEventListener('close',()=>{mB.innerHTML=''});
+  document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.copy,done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500)};
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(b.previousElementSibling);const s=getSelection();s.removeAllRanges();s.addRange(r)};
+    navigator.clipboard?navigator.clipboard.writeText(v).then(done,sel):sel()}));
+})();
+</script>
+
+</body>
+</html>

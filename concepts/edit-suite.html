@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Akrem Ben Lagha · Edit Suite</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Concept 1, Edit Suite: the portfolio is an editing suite. Edit page = viewer + inspector (bio as clip metadata) + timeline of projects.
+   Color page = drag between LOG and the final grade. Deliver page = contact as a render queue. */
+:root{
+  --bg:#18181b;--panel:#212125;--panel-2:#2a2a2f;--line:#36363d;--text:#dcdce1;--mute:#8a8a94;
+  --head:#ff453a;--sel:#f2c14e;
+  --c-brands:#2f9c94;--c-music:#8b5cf6;--c-travel:#e07b39;--c-weddings:#d0609a;--c-motion:#3b82d6;
+  --serif:"Instrument Serif","Times New Roman",Georgia,serif;
+  --ui:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gl:max(12px,env(safe-area-inset-left,0px));--gr:max(12px,env(safe-area-inset-right,0px));
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--bg);scroll-behavior:smooth;scroll-padding-top:52px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--text);font:400 14px/1.5 var(--ui);-webkit-font-smoothing:antialiased;padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+img,video,iframe{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--mute);font-variant-numeric:tabular-nums}
+.shell{max-width:1440px;margin:0 auto;padding-left:var(--gl);padding-right:var(--gr)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--panel)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--panel);border-bottom:1px solid var(--line)}
+.bar .shell{display:flex;align-items:center;justify-content:space-between;gap:12px;height:44px}
+.proj{display:flex;align-items:center;gap:10px;min-width:0}
+.proj b{font-weight:600;font-size:13px;white-space:nowrap}
+.proj .mono{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--head);flex:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--head) 25%,transparent)}
+.avail{display:flex;align-items:center;gap:8px;font-size:12px;white-space:nowrap}
+.avail i{width:7px;height:7px;border-radius:50%;background:#4ade80}
+@media (max-width:560px){.proj .mono{display:none}}
+.pages{position:fixed;left:0;right:0;bottom:0;z-index:55;background:var(--panel);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.pages .shell{display:flex;justify-content:center;gap:4px;height:56px;align-items:center}
+.pages a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--mute);font-size:11px;padding:6px 18px;border-radius:6px}
+.pages a svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6}
+.pages a:hover{color:var(--text)}
+.pages a[aria-current="true"]{color:var(--text);background:var(--panel-2)}
+.pages a[aria-current="true"] svg{stroke:var(--sel)}
+.page{padding-block:14px 28px}
+.page-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:18px 0 12px;flex-wrap:wrap}
+.page-h h2{margin:0;font:italic 400 clamp(34px,4.6vw,56px)/1 var(--serif);letter-spacing:-.01em}
+.page-h p{margin:0;color:var(--mute);max-width:56ch}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;min-width:0}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);min-height:36px}
+.ph .t{font-size:12px;font-weight:600;letter-spacing:.02em}
+.edit-top{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(300px,1fr);gap:10px}
+@media (max-width:900px){.edit-top{grid-template-columns:1fr}}
+.screen{position:relative;aspect-ratio:16/9;background:#000;overflow:hidden}
+.screen > video,.screen > img,.screen > iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}
+.screen > iframe{background:#000}
+.safe{position:absolute;inset:5%;pointer-events:none;border:1px dashed rgba(255,255,255,.08)}
+.titlecard{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(16px,4vw,48px);background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(0,0,0,.72));pointer-events:none;transition:opacity .5s}
+.titlecard small{font:italic 400 clamp(13px,1.4vw,18px) var(--serif);color:rgba(255,255,255,.75)}
+.titlecard h1{margin:0;font:400 clamp(44px,8.4vw,118px)/.9 var(--serif);letter-spacing:-.02em;color:#fff}
+.titlecard h1 em{font-style:italic}
+.titlecard .mono{color:rgba(255,255,255,.7);margin-top:12px;font-size:12px}
+.burn{position:absolute;left:10px;top:8px;right:10px;display:flex;justify-content:space-between;gap:10px;pointer-events:none}
+.burn span{font:500 11px var(--mono);color:#fff;background:rgba(0,0,0,.5);padding:2px 6px;border-radius:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.offline{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px;background:radial-gradient(80% 80% at 50% 40%,color-mix(in srgb,var(--clip,#444) 35%,#000),#000)}
+.offline b{font:italic 400 clamp(30px,4vw,52px)/1 var(--serif);color:#fff}
+.transport{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;border-top:1px solid var(--line)}
+.transport .btns{display:flex;gap:4px}
+.tbtn{width:34px;height:30px;border-radius:4px;border:1px solid var(--line);background:var(--panel-2);display:grid;place-items:center;cursor:pointer}
+.tbtn:hover{border-color:var(--mute)}
+.tbtn svg{width:13px;height:13px;fill:var(--text)}
+.tc{font:500 15px var(--mono);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.takes{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 10px}
+.takes:empty{display:none}
+.take{font:500 11px var(--mono);padding:5px 9px;border:1px solid var(--line);border-radius:3px;background:var(--panel-2);cursor:pointer;color:var(--mute)}
+.take[aria-pressed="true"]{color:#111;background:var(--sel);border-color:var(--sel)}
+.insp .tabs{display:flex;gap:2px}
+.insp .tabs button{background:none;border:0;padding:4px 10px;border-radius:4px;font-size:12px;color:var(--mute);cursor:pointer}
+.insp .tabs button[aria-selected="true"]{background:var(--panel-2);color:var(--text)}
+.insp .body{padding:14px 14px 16px;display:flex;flex-direction:column;gap:14px}
+.clipname{font:500 12px var(--mono);color:var(--sel);word-break:break-all}
+.insp h3{margin:0;font:italic 400 34px/1 var(--serif)}
+.insp p{margin:0;opacity:.88}
+.meta{display:grid;grid-template-columns:118px 1fr;border-top:1px solid var(--line);margin:0}
+.meta dt,.meta dd{margin:0;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+.meta dt{font:400 11px/1.9 var(--mono);color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+.meta dd{min-width:0}
+.tracks-mini{display:flex;flex-direction:column;gap:6px}
+.job{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:baseline}
+.job .y{font:400 11px var(--mono);color:var(--mute);grid-row:span 2;width:84px}
+.job b{font-weight:600;font-size:13px}
+.job span{color:var(--mute);font-size:12.5px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:4px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid var(--line);background:var(--panel-2);cursor:pointer}
+.btn:hover{border-color:var(--mute)}
+.btn.go{background:var(--sel);color:#141414;border-color:var(--sel)}
+.btn svg{width:15px;height:15px;fill:currentColor}
+.tl{margin-top:10px}
+.hint{display:flex;gap:6px;align-items:center}
+kbd{font:500 10.5px var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:3px;padding:0 5px;color:var(--text);background:var(--panel-2)}
+.tl-scroll{overflow-x:auto;overscroll-behavior-x:contain}
+.tl-inner{position:relative;min-width:980px}
+.tl-row{display:grid;grid-template-columns:86px 1fr;border-bottom:1px solid var(--line)}
+.tl-row:last-child{border-bottom:0}
+.th{display:flex;flex-direction:column;justify-content:center;padding:0 10px;border-right:1px solid var(--line);background:var(--panel-2);font:500 11px var(--mono);color:var(--mute);position:sticky;left:0;z-index:3}
+.th b{color:var(--text);font-weight:500}
+.lane{position:relative;display:flex;gap:2px;padding:4px 2px;min-width:0}
+.ruler .lane{height:26px;padding:0;cursor:ew-resize;touch-action:none}
+.ruler .tick{position:absolute;top:0;bottom:0;border-left:1px solid var(--line);font:400 10px var(--mono);color:var(--mute);padding:6px 0 0 4px;white-space:nowrap;pointer-events:none}
+.v2 .lane{height:30px}
+.title-clip{display:flex;align-items:center;padding:0 8px;border-radius:3px;font:500 11px var(--mono);color:#fff;white-space:nowrap;overflow:hidden;background:color-mix(in srgb,var(--c) 45%,#1b1b1e);border:1px solid color-mix(in srgb,var(--c) 70%,#000);min-width:0}
+.v1 .lane{height:86px}
+.clip{position:relative;min-width:0;border-radius:3px;overflow:hidden;cursor:pointer;border:1px solid color-mix(in srgb,var(--c) 75%,#000);background:color-mix(in srgb,var(--c) 30%,#141416);padding:0;text-align:left;display:flex;flex-direction:column}
+.clip .cap{position:relative;z-index:2;padding:3px 6px;font:500 11px var(--ui);color:#fff;background:color-mix(in srgb,var(--c) 85%,#000);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clip .film{position:relative;flex:1;background-size:auto 100%;background-repeat:repeat-x;opacity:.9}
+.clip .film::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.35) 1px,transparent 1px) 0 0/48px 100%}
+.clip:hover{filter:brightness(1.15)}
+.clip[aria-pressed="true"]{outline:2px solid var(--sel);outline-offset:-1px;z-index:2}
+.a1 .lane{height:44px}
+.a1 canvas{width:100%;height:100%;display:block}
+.playhead{position:absolute;top:0;bottom:0;width:0;z-index:5;pointer-events:none;transition:left .35s cubic-bezier(.2,.7,.2,1)}
+.playhead::before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:2px;background:var(--head)}
+.playhead::after{content:"";position:absolute;left:-7px;top:0;border:7px solid transparent;border-top:9px solid var(--head);border-bottom:0}
+.playhead.drag{transition:none}
+@media (prefers-reduced-motion:reduce){.playhead{transition:none}}
+.grade{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:10px}
+@media (max-width:900px){.grade{grid-template-columns:1fr}}
+.compare{position:relative;aspect-ratio:3/2;background:#000;overflow:hidden;user-select:none}
+.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.compare .log{filter:saturate(.28) contrast(.62) brightness(1.16) sepia(.06)}
+.compare .graded{clip-path:inset(0 0 0 var(--x,50%))}
+.compare .handle{position:absolute;top:0;bottom:0;left:var(--x,50%);width:2px;background:#fff;transform:translateX(-1px);pointer-events:none}
+.compare .handle::after{content:"";position:absolute;top:50%;left:50%;width:34px;height:34px;border-radius:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.55);border:2px solid #fff}
+.compare .lab{position:absolute;bottom:10px;font:500 11px var(--mono);color:#fff;background:rgba(0,0,0,.55);padding:3px 7px;border-radius:2px;pointer-events:none}
+.compare .lab.l{left:10px}.compare .lab.r{right:10px}
+#gradeRange{position:absolute;inset:0;opacity:0;width:100%;height:100%;margin:0;cursor:ew-resize}
+.wheels{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px}
+.wheel{display:flex;flex-direction:column;align-items:center;gap:8px}
+.wheel .w{position:relative;width:100%;max-width:120px;aspect-ratio:1;border-radius:50%;background:conic-gradient(from 90deg,#d64545,#d6c745,#45d65a,#45d6d0,#4560d6,#c445d6,#d64545);box-shadow:inset 0 0 0 6px var(--panel),inset 0 0 0 7px var(--line)}
+.wheel .w::before{content:"";position:absolute;inset:7px;border-radius:50%;background:radial-gradient(circle,rgba(33,33,37,.15),rgba(33,33,37,.85) 70%)}
+.wheel i{position:absolute;z-index:2;width:12px;height:12px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.4);left:calc(50% + var(--dx) * var(--p));top:calc(50% + var(--dy) * var(--p));transform:translate(-50%,-50%)}
+.wheel .mono{text-transform:uppercase}
+.stills{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 14px 14px}
+.still{padding:0;border:1px solid var(--line);border-radius:3px;overflow:hidden;cursor:pointer;aspect-ratio:1;background:#000;position:relative}
+.still img{width:100%;height:100%;object-fit:cover;opacity:.7;transition:opacity .2s}
+.still:hover img,.still[aria-pressed="true"] img{opacity:1}
+.still[aria-pressed="true"]{border-color:var(--sel)}
+.still span{position:absolute;left:4px;bottom:3px;font:500 9.5px var(--mono);color:#fff;text-shadow:0 1px 2px #000}
+.notes{padding:0 14px 14px;color:var(--mute);font-size:13px;margin:0}
+.deliver{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,1fr);gap:10px}
+@media (max-width:900px){.deliver{grid-template-columns:1fr}}
+.queue-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}
+th{font:500 10.5px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--mute);background:var(--panel-2)}
+.status{display:inline-flex;align-items:center;gap:6px;font:500 11px var(--mono);color:#4ade80}
+.status::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.progress{height:4px;border-radius:2px;background:var(--panel-2);margin-top:8px;overflow:hidden}
+.progress span{display:block;height:100%;width:100%;background:var(--sel)}
+.big-render{padding:22px 14px 18px;display:flex;flex-direction:column;gap:14px;align-items:flex-start;border-top:1px solid var(--line)}
+.big-render h3{margin:0;font:italic 400 clamp(34px,4.4vw,54px)/1 var(--serif)}
+.big-render p{margin:0;color:var(--mute);max-width:52ch}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.out .f{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.out .f:last-child{border-bottom:0}
+.out .f .mono{text-transform:uppercase}
+.out .f a,.out .f .v{font-size:14px;text-decoration:none;overflow-wrap:anywhere}
+.out .f a:hover{color:var(--sel)}
+.copy{font:500 10.5px var(--mono);text-transform:uppercase;color:var(--mute);background:var(--panel-2);border:1px solid var(--line);border-radius:3px;padding:4px 8px;cursor:pointer}
+@media (max-width:440px){.out .f{grid-template-columns:minmax(0,1fr) auto}.out .f .mono{grid-column:1/-1}}
+.end{padding-block:18px 8px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+
+<header class="bar">
+  <div class="shell">
+    <div class="proj"><span class="dot" aria-hidden="true"></span><b>Akrem Ben Lagha</b><span class="mono">Portfolio_2021–2026 · 23.976 fps · Doha</span></div>
+    <span class="avail"><i aria-hidden="true"></i>Available · full time &amp; freelance</span>
+  </div>
+</header>
+
+<main>
+<section class="page" id="edit" aria-label="Edit">
+  <div class="shell">
+    <div class="edit-top">
+      <div class="panel">
+        <div class="ph"><span class="t" id="vName">Program · Showreel</span><span class="mono" id="vFmt">1920×1080 · Sri Lanka</span></div>
+        <div class="screen" id="screen">
+          <video id="reel" muted playsinline autoplay preload="auto" poster="../assets/still-postcard6.jpg" aria-label="Showreel"></video>
+          <div class="titlecard" id="titlecard">
+            <small>a film by</small>
+            <h1>Akrem <em>Ben Lagha</em></h1>
+            <div class="mono">Filmmaker · Videographer · Editor · shooting, cutting &amp; grading since 2021</div>
+          </div>
+          <div class="safe" aria-hidden="true"></div>
+          <div class="burn" aria-hidden="true"><span id="burnL">SHOWREEL_V1</span><span id="burnR">TC 00:00:00:00</span></div>
+        </div>
+        <div class="transport">
+          <div class="btns">
+            <button class="tbtn" type="button" id="prev" aria-label="Previous project"><svg viewBox="0 0 12 12"><path d="M2 1h2v10H2zM11 1v10L4.5 6z"/></svg></button>
+            <button class="tbtn" type="button" id="playBtn" aria-label="Play or pause"><svg viewBox="0 0 12 12" id="playIco"><path d="M3 2h2v8H3zM7 2h2v8H7z"/></svg></button>
+            <button class="tbtn" type="button" id="next" aria-label="Next project"><svg viewBox="0 0 12 12"><path d="M8 1h2v10H8zM1 1v10l6.5-5z"/></svg></button>
+          </div>
+          <span class="tc" id="tc">00:00:00:00</span>
+        </div>
+        <div class="takes" id="takes"></div>
+      </div>
+      <aside class="panel insp" aria-label="Inspector">
+        <div class="ph">
+          <span class="t">Inspector</span>
+          <div class="tabs" role="tablist">
+            <button type="button" role="tab" id="tabBio" aria-selected="true">Bio</button>
+            <button type="button" role="tab" id="tabClip" aria-selected="false">Clip</button>
+          </div>
+        </div>
+        <div class="body" id="bio" role="tabpanel">
+          <div class="clipname">AKREM_BEN_LAGHA.mov</div>
+          <h3>About me</h3>
+          <p>Tunisian filmmaker based in Doha. I take a film from the camera to the final grade on my own: shooting, editing, color and motion graphics. Travel and adventure films are the work I want to do full time, and I can leave Doha and join a trip at short notice.</p>
+          <dl class="meta">
+            <dt>Role</dt><dd>Filmmaker · Videographer · Editor</dd>
+            <dt>Based in</dt><dd>Doha, Qatar · from Tunisia</dd>
+            <dt>Rolling since</dt><dd>2021</dd>
+            <dt>Audio tracks</dt><dd>Arabic · French · English</dd>
+            <dt>Software</dt><dd>DaVinci Resolve (main), Premiere Pro, After Effects</dd>
+            <dt>Formats</dt><dd>Long form &amp; multicam · Reels, TikTok, Shorts</dd>
+          </dl>
+          <div class="tracks-mini">
+            <div class="mono" style="text-transform:uppercase">Edit history</div>
+            <div class="job"><span class="y">2026 – now</span><b>Video Producer, Camera &amp; Lead Editor</b><span>Lumiere Agency, Doha</span></div>
+            <div class="job"><span class="y">Freelance</span><b>Wedding Film Editor</b><span>Ais Art Prod &amp; Ais Art Wedding</span></div>
+            <div class="job"><span class="y">2021 – 2025</span><b>Videographer &amp; Video Editor</b><span>Another Vision Production, Tunisia</span></div>
+          </div>
+          <div class="row">
+            <a class="btn go" href="#deliver">Hire me</a>
+            <a class="btn" href="../assets/Akrem_Ben_Lagha_CV.pdf" target="_blank" rel="noopener">Export CV.pdf</a>
+          </div>
+        </div>
+        <div class="body" id="clipInfo" role="tabpanel" hidden></div>
+      </aside>
+    </div>
+    <div class="panel tl" aria-label="Timeline of projects">
+      <div class="ph"><span class="t">Timeline · Selected work</span><span class="hint mono"><kbd>←</kbd><kbd>→</kbd> step clips <kbd>Space</kbd> play</span></div>
+      <div class="tl-scroll">
+        <div class="tl-inner" id="tlInner">
+          <div class="tl-row ruler"><div class="th">TC</div><div class="lane" id="ruler"></div></div>
+          <div class="tl-row v2"><div class="th"><b>V2</b>Titles</div><div class="lane" id="v2"></div></div>
+          <div class="tl-row v1"><div class="th"><b>V1</b>Projects</div><div class="lane" id="v1"></div></div>
+          <div class="tl-row a1"><div class="th"><b>A1</b>Mix</div><div class="lane"><canvas id="wave" aria-hidden="true"></canvas></div></div>
+          <div class="playhead" id="playhead" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="color" aria-label="Color">
+  <div class="shell">
+    <div class="page-h"><h2>Color</h2><p>Every frame here left the camera flat. Drag across the image to watch the LOG footage turn into the final grade from the Sri Lanka trip.</p></div>
+    <div class="grade">
+      <div class="panel">
+        <div class="ph"><span class="t">Viewer · Split</span><span class="mono" id="gradeName">SL_DD3-8.jpg</span></div>
+        <div class="compare" id="compare">
+          <img class="log" id="imgLog" src="../assets/photo-dd3-8.jpg" alt="">
+          <img class="graded" id="imgGraded" src="../assets/photo-dd3-8.jpg" alt="Surfer resting on the sand facing a small island, Sri Lanka">
+          <div class="handle"></div>
+          <span class="lab l">LOG · camera original</span><span class="lab r">REC.709 · final grade</span>
+          <input type="range" id="gradeRange" min="0" max="100" value="50" aria-label="Compare LOG and graded image">
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph"><span class="t">Primaries</span><span class="mono" id="gradePct">50% graded</span></div>
+        <div class="wheels" id="wheels" style="--p:.5">
+          <div class="wheel"><div class="w"><i style="--dx:-14%;--dy:-10%"></i></div><span class="mono">Lift</span></div>
+          <div class="wheel"><div class="w"><i style="--dx:10%;--dy:8%"></i></div><span class="mono">Gamma</span></div>
+          <div class="wheel"><div class="w"><i style="--dx:18%;--dy:-6%"></i></div><span class="mono">Gain</span></div>
+        </div>
+        <div class="ph" style="border-top:1px solid var(--line)"><span class="t">Stills · Sri Lanka</span><span class="mono">6 grabs</span></div>
+        <div class="stills" id="stills"></div>
+        <p class="notes">Teal shadows, warm skin, sea kept green: a soft film look built in DaVinci Resolve.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="deliver" aria-label="Deliver">
+  <div class="shell">
+    <div class="page-h"><h2>Deliver</h2><p>Two jobs are in the queue and both are ready to render. Pick one and send it my way.</p></div>
+    <div class="deliver">
+      <div class="panel">
+        <div class="ph"><span class="t">Render queue</span><span class="mono">2 jobs</span></div>
+        <div class="queue-scroll">
+          <table>
+            <thead><tr><th>Job</th><th>Name</th><th>Format</th><th>Destination</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">01</td><td><b>Full-time role</b><div class="progress"><span></span></div></td><td>Video producer, camera, lead editor</td><td>Doha, or relocate</td><td><span class="status">Ready</span></td></tr>
+              <tr><td class="mono">02</td><td><b>Freelance shoot</b><div class="progress"><span></span></div></td><td>Travel &amp; adventure, brands, music, weddings</td><td>Anywhere, short notice</td><td><span class="status">Ready</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="big-render">
+          <h3>Start render</h3>
+          <p>Message me with the brief, dates and location.</p>
+          <div class="row">
+            <a class="btn go" href="https://wa.me/97433396359" target="_blank" rel="noopener">Render via WhatsApp</a>
+            <a class="btn" href="mailto:akrembenlagha@yahoo.fr">Render via email</a>
+            <a class="btn" href="../assets/Akrem_Ben_Lagha_CV.pdf" target="_blank" rel="noopener">Export CV.pdf</a>
+          </div>
+        </div>
+      </div>
+      <div class="panel out">
+        <div class="ph"><span class="t">Output settings</span><span class="mono">Contact</span></div>
+        <div class="f"><span class="mono">Email</span><a href="mailto:akrembenlagha@yahoo.fr">akrembenlagha@yahoo.fr</a><button class="copy" type="button" data-copy="akrembenlagha@yahoo.fr">Copy</button></div>
+        <div class="f"><span class="mono">WhatsApp</span><a href="https://wa.me/97433396359" target="_blank" rel="noopener">+974 3339 6359</a><button class="copy" type="button" data-copy="+974 3339 6359">Copy</button></div>
+        <div class="f"><span class="mono">Instagram</span><a href="https://www.instagram.com/akreem.bl/" target="_blank" rel="noopener">@akreem.bl</a><span></span></div>
+        <div class="f"><span class="mono">YouTube</span><a href="https://www.youtube.com/@AkremBenLagha" target="_blank" rel="noopener">@AkremBenLagha</a><span></span></div>
+        <div class="f"><span class="mono">Behance</span><a href="https://www.behance.net/akrembenlagha1" target="_blank" rel="noopener">akrembenlagha1</a><span></span></div>
+        <div class="f"><span class="mono">Location</span><span class="v">Doha, Qatar · 25.28° N 51.53° E</span><span></span></div>
+      </div>
+    </div>
+    <div class="end mono"><span>© 2026 Akrem Ben Lagha</span><span>End of timeline · 01:00:00:00</span></div>
+  </div>
+</section>
+</main>
+
+<nav class="pages" aria-label="Pages">
+  <div class="shell">
+    <a href="#edit" data-p="edit" aria-current="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="5" rx="1"/><rect x="3" y="14" width="11" height="5" rx="1"/><path d="M17 3v18"/></svg>Edit</a>
+    <a href="#color" data-p="color"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="14.5" cy="9.5" r="1.6"/></svg>Color</a>
+    <a href="#deliver" data-p="deliver"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/><path d="M4 20h16"/></svg>Deliver</a>
+  </div>
+</nav>
+
+<script src="../assets/projects.js"></script>
+<script>
+(function(){
+  const {P,CATS,CDN,PLAYER,BH,canEmbed,esc}=window.AKREM;
+  const CVAR={brands:"--c-brands",music:"--c-music",travel:"--c-travel",weddings:"--c-weddings",motion:"--c-motion"};
+  P.forEach(p=>{p.w=1+p.n*.55});
+  const $=id=>document.getElementById(id), pad=n=>String(Math.floor(n)).padStart(2,'0');
+  const tcOf=s=>`${pad(s/3600)}:${pad(s/60%60)}:${pad(s%60)}:${pad((s%1)*24)}`;
+  const total=P.reduce((a,p)=>a+p.w,0);
+  const v1=$('v1'),v2=$('v2'),ruler=$('ruler');
+  P.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='clip';b.style.flex=p.w;b.style.setProperty('--c',`var(${CVAR[p.cat]})`);
+    b.setAttribute('aria-pressed','false');b.setAttribute('aria-label',`${p.t}, ${p.n} ${p.n>1?'videos':'video'}`);
+    b.innerHTML=`<span class="cap">${esc(p.t)}</span><span class="film" style="background-image:url('${p.src}')"></span>`;
+    b.addEventListener('click',()=>select(i,true));p.el=b;v1.appendChild(b)});
+  let i=0;while(i<P.length){let j=i,w=0;while(j<P.length&&P[j].cat===P[i].cat){w+=P[j].w;j++}
+    const t=document.createElement('div');t.className='title-clip';t.style.flex=w;t.style.setProperty('--c',`var(${CVAR[P[i].cat]})`);t.textContent='T  '+CATS[P[i].cat];v2.appendChild(t);i=j}
+  for(let k=0;k<10;k++){const s=document.createElement('span');s.className='tick';s.style.left=(k*10)+'%';s.textContent=tcOf(total*12*k/10).slice(0,8);ruler.appendChild(s)}
+  function drawWave(){const c=$('wave'),r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;const x=c.getContext('2d');x.scale(d,d);
+    const mid=r.height/2;let seed=7;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;x.fillStyle='rgba(74,222,128,.75)';
+    for(let px=0;px<r.width;px+=3){const env=.35+.65*Math.abs(Math.sin(px/57)*Math.cos(px/131));const h=Math.max(1,(rnd()*.6+.4)*env*mid*.92);x.fillRect(px,mid-h,2,h*2)}}
+  drawWave();addEventListener('resize',()=>{drawWave();placeHead()});
+  const head=$('playhead'),inner=$('tlInner');let cur=-1;
+  function placeHead(){const box=inner.getBoundingClientRect();let x=v1.getBoundingClientRect().left-box.left+4;
+    if(cur>=0){const r=P[cur].el.getBoundingClientRect();x=r.left-box.left+Math.min(18,r.width/4)}head.style.left=x+'px'}
+  placeHead();
+  function clipAtX(cx){for(let k=0;k<P.length;k++){const r=P[k].el.getBoundingClientRect();if(cx>=r.left&&cx<=r.right+2)return k}return cx<P[0].el.getBoundingClientRect().left?0:P.length-1}
+  let dragging=false;
+  ruler.addEventListener('pointerdown',e=>{dragging=true;head.classList.add('drag');ruler.setPointerCapture(e.pointerId);scrub(e)});
+  ruler.addEventListener('pointermove',e=>{if(dragging)scrub(e)});
+  ruler.addEventListener('pointerup',e=>{dragging=false;head.classList.remove('drag');select(clipAtX(e.clientX),true)});
+  function scrub(e){head.style.left=(e.clientX-inner.getBoundingClientRect().left)+'px';const k=clipAtX(e.clientX);P.forEach((p,j)=>p.el.setAttribute('aria-pressed',j===k))}
+  const screen=$('screen'),reel=$('reel'),titlecard=$('titlecard'),tc=$('tc'),burnR=$('burnR'),burnL=$('burnL'),takesEl=$('takes');
+  const reelClips=["../assets/loop-postcard6.mp4","../assets/loop-postcard1.mp4","../assets/loop-postcard4.mp4","../assets/loop-postcard5.mp4"];
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let ri=0,base=0,media=reel;
+  const clearScreen=()=>screen.querySelectorAll('.dyn').forEach(n=>n.remove());
+  function playReel(){reel.hidden=false;reel.src=reelClips[ri];if(!reduce)reel.play().catch(()=>{})}
+  reel.addEventListener('ended',()=>{if(cur!==-1)return;base+=reel.duration||0;ri=(ri+1)%reelClips.length;if(!ri)base=0;playReel()});
+  playReel();
+  (function tick(){let t=0;if(media&&media.tagName==='VIDEO')t=(media===reel?base:0)+(media.currentTime||0);const s=tcOf(t);tc.textContent=s;burnR.textContent='TC '+s;requestAnimationFrame(tick)})();
+  function select(k,fromUser){if(k<0||k>=P.length)return;cur=k;const p=P[k];
+    P.forEach((q,j)=>q.el.setAttribute('aria-pressed',j===k));placeHead();
+    titlecard.style.opacity=0;reel.pause();reel.hidden=true;clearScreen();media=null;
+    $('vName').textContent='Program · '+p.t;$('vFmt').textContent=`${p.n} ${p.n>1?'videos':'video'} · ${CATS[p.cat]}`;burnL.textContent=p.file;
+    takesEl.innerHTML='';const list=p.takes||p.v.map((id,j)=>[`Take ${j+1}`,id]);
+    if(list.length>1)list.forEach((tk,j)=>{const b=document.createElement('button');b.type='button';b.className='take';b.textContent=tk[0];b.setAttribute('aria-pressed',j===0);
+      b.addEventListener('click',()=>{takesEl.querySelectorAll('.take').forEach(x=>x.setAttribute('aria-pressed',x===b));load(p,j)});takesEl.appendChild(b)});
+    load(p,0);showClip(p);
+    if(fromUser&&innerWidth<900)screen.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'})}
+  function load(p,j){clearScreen();
+    if(p.takes){const [,src,poster]=p.takes[j];const v=document.createElement('video');v.className='dyn';v.src='../'+src;v.poster='../'+poster;v.controls=true;v.playsInline=true;v.autoplay=!reduce;screen.prepend(v);media=v;return}
+    if(canEmbed){const f=document.createElement('iframe');f.className='dyn';f.src=`${PLAYER+p.v[j]}/embed?api_key=behance1&bgcolor=%23000000`;f.allow='autoplay; fullscreen';f.allowFullscreen=true;f.title=p.t;screen.prepend(f);return}
+    const o=document.createElement('div');o.className='offline dyn';o.style.setProperty('--clip',`var(${CVAR[p.cat]})`);
+    o.innerHTML=`<b>${esc(p.t)}</b><a class="btn go" href="${BH+p.url}" target="_blank" rel="noopener">Watch on Behance ↗</a>`;screen.prepend(o)}
+  function showReel(){cur=-1;P.forEach(q=>q.el.setAttribute('aria-pressed','false'));clearScreen();titlecard.style.opacity=1;media=reel;takesEl.innerHTML='';
+    $('vName').textContent='Program · Showreel';$('vFmt').textContent='1920×1080 · Sri Lanka';burnL.textContent='SHOWREEL_V1';playReel();placeHead()}
+  const tabBio=$('tabBio'),tabClip=$('tabClip'),bio=$('bio'),clipInfo=$('clipInfo');
+  function tab(w){const b=w==='bio';tabBio.setAttribute('aria-selected',b);tabClip.setAttribute('aria-selected',!b);bio.hidden=!b;clipInfo.hidden=b}
+  tabBio.addEventListener('click',()=>tab('bio'));tabClip.addEventListener('click',()=>{if(cur<0)select(0,false);tab('clip')});
+  function showClip(p){clipInfo.innerHTML=`<div class="clipname">${esc(p.file)}</div><h3>${esc(p.t)}</h3><p>${esc(p.d)}</p>
+      <dl class="meta"><dt>Client</dt><dd>${esc(p.client)}</dd><dt>My role</dt><dd>${esc(p.role)}</dd><dt>Bin</dt><dd>${esc(CATS[p.cat])}</dd><dt>Media</dt><dd>${p.n} ${p.n>1?'videos':'video'}</dd><dt>Clip</dt><dd>${cur+1} of ${P.length}</dd></dl>
+      <div class="row"><a class="btn" href="${BH+p.url}" target="_blank" rel="noopener">Open on Behance ↗</a><button class="btn" type="button" id="backReel">Back to showreel</button></div>`;
+    $('backReel').addEventListener('click',()=>{showReel();tab('bio')});tab('clip')}
+  $('next').addEventListener('click',()=>select(cur+1<P.length?cur+1:0,true));
+  $('prev').addEventListener('click',()=>cur<=0?showReel():select(cur-1,true));
+  const playIco=$('playIco');
+  function toggle(){const m=media;if(!m||m.tagName!=='VIDEO')return;m.paused?m.play().catch(()=>{}):m.pause()}
+  $('playBtn').addEventListener('click',toggle);
+  setInterval(()=>{const m=media,on=!!(m&&m.tagName==='VIDEO'&&!m.paused);playIco.innerHTML=on?'<path d="M3 2h2v8H3zM7 2h2v8H7z"/>':'<path d="M3 1.5v9l7.5-4.5z"/>'},250);
+  addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
+    if(e.key==='ArrowRight'){e.preventDefault();select(cur+1<P.length?cur+1:0,false)}
+    else if(e.key==='ArrowLeft'){e.preventDefault();cur<=0?showReel():select(cur-1,false)}
+    else if(e.key===' '&&e.target===document.body){e.preventDefault();toggle()}});
+  const stills=[["dd3-8","Surfer resting on the sand facing a small island"],["d3-52","Surfer walking out of the waves"],["d3-25","Surfer carrying her board along the shore"],["d3-13","Woman in front of a painted fishing boat"],["d3-65","Surfer waxing her board outside a surf shack"],["dd3-12","Surfer looking out at an island"]];
+  const sEl=$('stills'),cmp=$('compare'),wheels=$('wheels'),rng=$('gradeRange');
+  stills.forEach(([n,alt],k)=>{const b=document.createElement('button');b.type='button';b.className='still';b.setAttribute('aria-pressed',k===0);b.setAttribute('aria-label','Show '+alt);
+    b.innerHTML=`<img loading="lazy" src="../assets/photo-${n}.jpg" alt=""><span>${n.toUpperCase()}</span>`;
+    b.addEventListener('click',()=>{sEl.querySelectorAll('.still').forEach(x=>x.setAttribute('aria-pressed',x===b));$('imgLog').src=$('imgGraded').src=`../assets/photo-${n}.jpg`;$('imgGraded').alt=alt;$('gradeName').textContent=`SL_${n.toUpperCase()}.jpg`});sEl.appendChild(b)});
+  function setGrade(v){cmp.style.setProperty('--x',(100-v)+'%');wheels.style.setProperty('--p',(v/100).toFixed(2));$('gradePct').textContent=Math.round(v)+'% graded'}
+  rng.addEventListener('input',()=>setGrade(+rng.value));setGrade(50);
+  const links=[...document.querySelectorAll('.pages a')];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.setAttribute('aria-current',a.dataset.p===e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+  ['edit','color','deliver'].forEach(id=>io.observe($(id)));
+  document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.copy,done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500)};
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(b.previousElementSibling);const s=getSelection();s.removeAllRanges();s.addRange(r)};
+    navigator.clipboard?navigator.clipboard.writeText(v).then(done,sel):sel()}));
+})();
+</script>
+
+</body>
+</html>
