@@ -92,6 +92,25 @@ section{padding-block:clamp(52px,7vw,90px)}
 .filters button:hover{border-color:var(--navy)}
 .filters button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
 
+/* featured film */
+.feature{background:#0f1526;color:#f3f1ea;border-radius:20px;overflow:hidden;box-shadow:0 18px 44px rgba(27,39,71,.22);margin-bottom:clamp(22px,3vw,34px)}
+.f-stage{position:relative;aspect-ratio:16/9;background:#000;max-height:78vh;width:100%}
+.f-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.f-tag{position:absolute;top:16px;left:16px;display:flex;gap:8px;align-items:center;font:500 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:rgba(15,21,38,.7);padding:6px 10px;border-radius:999px;color:#fff}
+.f-tag i{width:8px;height:8px;border-radius:50%;background:#e2554a}
+.f-ctrl{position:absolute;right:16px;bottom:16px;display:flex;gap:8px}
+.f-ctrl button{min-height:42px;padding:0 16px;border-radius:999px;border:0;background:rgba(251,250,246,.92);color:var(--navy);font:700 14px var(--sans);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.f-ctrl button:hover{background:#fff}
+.f-info{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 28px;align-items:end;padding:clamp(18px,3vw,30px)}
+@media (max-width:760px){.f-info{grid-template-columns:1fr}}
+.f-info h3{margin:6px 0 8px;font:900 clamp(30px,4vw,48px)/1 var(--serif)}
+.f-info p{margin:0;color:#c9cfdb;max-width:60ch}
+.f-info .mono{color:#9aa6bd}
+.f-takes{display:flex;gap:8px;flex-wrap:wrap;grid-column:1/-1}
+.f-takes button{min-height:38px;padding:0 14px;border-radius:999px;border:1.5px solid #3a4560;background:transparent;color:#f3f1ea;font:500 14px var(--sans);cursor:pointer}
+.f-takes button[aria-pressed="true"]{background:#f3f1ea;color:var(--navy);border-color:#f3f1ea}
+.more{margin:0 0 16px;font:900 clamp(24px,2.6vw,32px)/1.1 var(--serif)}
+
 /* work cards */
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,22px)}
 @media (max-width:960px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -212,7 +231,27 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
 
   <section id="work">
     <div class="wrap">
-      <div class="head"><h2>My work</h2><p>12 projects. Tap any one to watch it here.</p></div>
+      <div class="head"><h2>My work</h2><p>Starting with my favourite: the Sri Lanka surf trip.</p></div>
+      <article class="feature" aria-label="Featured film: Sri Lanka surf trip">
+        <div class="f-stage">
+          <video id="fVid" muted playsinline loop preload="metadata" poster="../assets/still-LANKA2.jpg" src="../assets/film-LANKA2.mp4"></video>
+          <span class="f-tag"><i aria-hidden="true"></i>Featured film</span>
+          <div class="f-ctrl">
+            <button type="button" id="fPlay" aria-label="Pause">❚❚ Pause</button>
+            <button type="button" id="fSound">🔈 Sound on</button>
+          </div>
+        </div>
+        <div class="f-info">
+          <div>
+            <span class="mono">Travel film · Shot, edited &amp; graded by me</span>
+            <h3>Sri Lanka Surf Trip</h3>
+            <p>Surfers, fishermen up before the sun, harbour boats and street life between sessions on Sri Lanka's south coast. Shot handheld and finished with a soft filmic grade.</p>
+          </div>
+          <a class="btn" href="https://www.behance.net/gallery/258567637/Sri-Lanka-surf-trip" target="_blank" rel="noopener" style="background:transparent;color:#f3f1ea;border-color:#f3f1ea">Open on Behance ↗</a>
+          <div class="f-takes" id="fTakes" role="group" aria-label="Choose a clip"></div>
+        </div>
+      </article>
+      <h3 class="more">More work</h3>
       <div class="filters" role="group" aria-label="Filter projects" id="filters"></div>
       <div class="grid" id="grid"></div>
     </div>
@@ -296,7 +335,7 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
   const cats=[["all","All"],...Object.entries(CATS)];
   cats.forEach(([k,l],i)=>{const b=document.createElement('button');b.type='button';b.textContent=l;b.dataset.k=k;b.setAttribute('aria-pressed',i===0);filters.appendChild(b)});
   let shown=P.slice();
-  function render(k){shown=P.filter(p=>k==='all'||p.cat===k);grid.innerHTML='';
+  function render(k){shown=P.filter(p=>p.id!=='SL'&&(k==='all'||p.cat===k));grid.innerHTML='';
     shown.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='card';b.style.setProperty('--c',COL[p.cat]);b.setAttribute('aria-label','Watch '+p.t);
       b.innerHTML=`<div class="thumb"><span class="fb">${esc(p.t)}</span><img loading="lazy" src="${p.src}" alt="" onerror="this.remove()">
         <span class="badge"><b>${esc(p.code)}</b><span>${p.n} ${p.n>1?'films':'film'}</span></span>
@@ -323,10 +362,23 @@ dialog::backdrop{background:rgba(15,22,40,.86)}
   dlg.addEventListener('close',()=>{stage.innerHTML=''});
 
   /* hero window reel */
-  const reel=$('reel'),clips=["../assets/loop-postcard5.mp4","../assets/loop-postcard6.mp4","../assets/loop-postcard1.mp4","../assets/loop-postcard4.mp4"];let ri=0;
-  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function play(){reel.src=clips[ri];if(!reduce)reel.play().catch(()=>{})}
-  reel.addEventListener('ended',()=>{ri=(ri+1)%clips.length;play()});play();
+  const reel=$('reel'),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const LOOP_START=1,LOOP_LEN=2; // a 2-second loop, not the whole clip
+  reel.src="../assets/loop-postcard5.mp4";
+  reel.addEventListener('loadedmetadata',()=>{reel.currentTime=LOOP_START;if(!reduce)reel.play().catch(()=>{})});
+  reel.addEventListener('timeupdate',()=>{if(reel.currentTime>=LOOP_START+LOOP_LEN||reel.currentTime<LOOP_START-.2)reel.currentTime=LOOP_START});
+
+  /* featured film: plays by itself when scrolled into view */
+  const fv=$('fVid'),fPlay=$('fPlay'),fSound=$('fSound'),fTakes=$('fTakes'),SL=P.find(p=>p.id==='SL');
+  let userPaused=false;
+  const setPlay=()=>{const on=!fv.paused;fPlay.textContent=on?'❚❚ Pause':'▶ Play';fPlay.setAttribute('aria-label',on?'Pause':'Play')};
+  fv.addEventListener('play',setPlay);fv.addEventListener('pause',setPlay);
+  fPlay.addEventListener('click',()=>{if(fv.paused){userPaused=false;fv.play().catch(()=>{})}else{userPaused=true;fv.pause()}});
+  fSound.addEventListener('click',()=>{fv.muted=!fv.muted;fSound.textContent=fv.muted?'🔈 Sound on':'🔇 Mute';if(fv.paused){userPaused=false;fv.play().catch(()=>{})}});
+  SL.takes.forEach((t,j)=>{const b=document.createElement('button');b.type='button';b.textContent=t[0];b.setAttribute('aria-pressed',j===0);
+    b.addEventListener('click',()=>{fTakes.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));fv.poster='../'+t[2];fv.src='../'+t[1];userPaused=false;fv.play().catch(()=>{})});fTakes.appendChild(b)});
+  if(!reduce)new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){if(!userPaused)fv.play().catch(()=>{})}else fv.pause()}),{threshold:.45}).observe(fv);
+  setPlay();
 
   /* menu highlight */
   const links=[...document.querySelectorAll('.menu a.l')];
